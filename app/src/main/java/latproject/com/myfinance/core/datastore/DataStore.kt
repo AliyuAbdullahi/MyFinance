@@ -1,5 +1,8 @@
 package latproject.com.myfinance.core.datastore
 
-class DataStore {
+import javax.inject.Inject
+
+class DataStore @Inject constructor(var offlineStore: OfflineStore, var onlineStore: OnlineStore) {
+
 
 }

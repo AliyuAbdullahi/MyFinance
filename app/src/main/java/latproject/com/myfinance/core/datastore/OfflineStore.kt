@@ -1,4 +1,9 @@
 package latproject.com.myfinance.core.datastore
 
-class OfflineStore {
+import latproject.com.myfinance.core.room.LocalDatabaseManager
+import javax.inject.Inject
+
+class OfflineStore @Inject constructor(roomManager: LocalDatabaseManager) {
+
+
 }
