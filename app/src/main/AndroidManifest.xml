@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="latproject.com.myfinance">
 
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:name=".MyFinanceApp"
         android:allowBackup="true"
@@ -23,7 +27,13 @@
         <activity
             android:name=".views.transactions.activities.Transactions"
             android:label="@string/title_activity_transactions"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <receiver android:name=".core.services.sms.SmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
