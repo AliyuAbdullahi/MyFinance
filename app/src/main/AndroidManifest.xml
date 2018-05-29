@@ -27,13 +27,18 @@
         <activity
             android:name=".views.transactions.activities.Transactions"
             android:label="@string/title_activity_transactions"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver android:name=".core.services.sms.SmsReceiver">
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".views.selectbank.activities.SelectBank"
+            android:label="@string/title_activity_select_bank"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
