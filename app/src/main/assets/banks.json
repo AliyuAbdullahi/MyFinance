@@ -1,0 +1,16 @@
+{
+  "banks": [
+    {
+      "name": "Stanbic IBTC",
+      "background_color": "#0A549A",
+      "logo": "stanbic",
+      "text_color": "#0A549A"
+    },
+    {
+      "name": "Guaranty Trust Bank (GTB)",
+      "background_color": "#C1471C",
+      "logo": "gtb",
+      "text_color": "#C1471C"
+    }
+  ]
+}

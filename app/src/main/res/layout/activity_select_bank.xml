@@ -37,6 +37,7 @@
             android:background="@drawable/gradient_down" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/bank_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"
@@ -44,13 +45,5 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <Button
-            android:id="@+id/next_button"
-            android:text="Next"
-            android:layout_margin="@dimen/size_16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_width="64dp"
-            android:layout_height="64dp" />
     </RelativeLayout>
 </layout>
