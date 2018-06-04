@@ -1,4 +1,4 @@
-package latproject.com.myfinance.views.selectbank
+package latproject.com.myfinance.views.selectbank.adapters
 
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.model.Bank
 import latproject.com.myfinance.databinding.LayoutBankCardBinding
+import latproject.com.myfinance.views.selectbank.utils.BankParser
 
 class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListViewHolder>() {
     val banks: MutableList<Bank> = mutableListOf()

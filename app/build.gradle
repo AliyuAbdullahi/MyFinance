@@ -71,4 +71,6 @@ dependencies {
     implementation 'io.reactivex:rxjava:1.3.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    implementation 'com.mikhaellopez:circularprogressbar:1.1.1'
 }

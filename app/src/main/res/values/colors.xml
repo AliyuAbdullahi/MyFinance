@@ -15,13 +15,22 @@
     <color name="colorGrey900">#212121</color>
 
     <color name="colorTranslucentLight">#20000000</color>
+    <color name="colorTranslucentDark">#60000000</color>
     <color name="white">#FFFFFF</color>
 
     <color name="colorTabActive">#2A86CE</color>
     <color name="colorTabActiveDark">#0A5189</color>
 
     <color name="googleSignIn">#F44336</color>
+    <color name="negative_red">#FF6E40</color>
     <color name="googleSignInClicked">#80C62828</color>
+
+
+    <color name="budget_fine">#4FC3F7</color>
+    <color name="budget_default">#BDBDBD</color>
+    <color name="budget_weird">#FDD835</color>
+    <color name="budget_going_bad">#F57C00</color>
+    <color name="budget_bad">#FF5722</color>
 
     <color name="facebookBlue">#3B5998</color>
 
