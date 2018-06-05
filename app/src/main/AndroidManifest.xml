@@ -17,9 +17,7 @@
         <activity
             android:name=".views.homescreen.activities.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.transactions.activities.TransactionsActivity"
             android:label="@string/title_activity_transactions"
@@ -40,10 +38,15 @@
         <activity
             android:name=".views.selectbank.activities.SelectBankActivity"
             android:label="@string/title_activity_select_bank"
-            android:theme="@style/AppTheme.NoActionBar">
-
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.budgets.activities.BudgetsActivity"
+            android:label="@string/title_activity_budgets"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.transactiondetails.activities.TransactionDetailsActivity"
+            android:label="@string/title_activity_transaction_details"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

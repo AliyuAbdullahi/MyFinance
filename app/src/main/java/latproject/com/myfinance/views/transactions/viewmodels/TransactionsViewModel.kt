@@ -16,13 +16,17 @@ class TransactionsViewModel(val context: Context) : CoreViewModel(context) {
     private fun getMessages(bankName: String): List<SmsMessage> {
         val smsReader = SmsReader(context)
 
-        return smsReader.getMessage().filter { it.from.toLowerCase().contains(bankName.toLowerCase()) }
+        return smsReader.getMessage().filter { it.from.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length/2)) }
     }
 
     fun getAllMessages(): List<SmsMessage> {
         val smsReader = SmsReader(context)
 
         return smsReader.getMessage()
+    }
+
+    fun getBank() : String?  {
+        return dataStore.getBank()
     }
 
     fun loadTransactions(bankName: String):MutableList<BankTransaction?> {

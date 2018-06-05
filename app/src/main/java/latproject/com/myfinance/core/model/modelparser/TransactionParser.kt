@@ -42,7 +42,7 @@ class TransactionParser {
                 val amount = message.substring(amountStartIndex, amountEndIndex)
 
                 val detailsStartIndex = message.toLowerCase().indexOf("Details:".toLowerCase()) + 8
-                val detailsEndIndex = message.toLowerCase().indexOf("Balance".toLowerCase())
+                val detailsEndIndex = message.toLowerCase().indexOf("Balance:".toLowerCase())
                 val messageDetails = message.substring(detailsStartIndex, detailsEndIndex)
 
                 val indexForBalanceAfterTransaction = message.indexOf("Balance:NGN") + 11
@@ -57,8 +57,6 @@ class TransactionParser {
                 bankTransaction.bank = smsMessage.from
                 bankTransaction.balanceAfterTransaction = balanceAfterTransaction.toDouble()
             }
-
-            bankTransaction.details = smsMessage.from
 
             return bankTransaction
         }

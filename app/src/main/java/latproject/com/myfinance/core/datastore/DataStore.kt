@@ -55,6 +55,10 @@ class DataStore(context: Context) {
         return offlineStore.getBudgets()
     }
 
+    fun getBank() : String? {
+        return offlineStore.getUser()?.bank
+    }
+
     fun deleteBudget(budget: Budget) {
         offlineStore.deleteBudget(budget)
     }

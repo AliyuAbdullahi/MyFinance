@@ -7,4 +7,9 @@
     <string name="no">No</string>
     <string name="bank_selection_confirmation">Bank Selection Confirmation</string>
     <string name="bank_name_confirmation">You have selected %1s as your bank, correct?</string>
+    <string name="title_activity_budgets">BudgetsActivity</string>
+    <string name="title_activity_transaction_details">TransactionDetailsActivity</string>
+    <string name="amount">NGN%1.2f</string>
+    <string name="credit">Credit</string>
+    <string name="debit">Debit</string>
 </resources>

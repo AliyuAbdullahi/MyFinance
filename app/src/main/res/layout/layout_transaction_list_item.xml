@@ -2,21 +2,25 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
+        android:layout_marginLeft="@dimen/text_size16"
+        android:layout_marginRight="@dimen/text_size16"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_marginBottom="@dimen/size_12dp"
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:layout_marginBottom="@dimen/size_12dp"
+            android:id="@+id/row_items_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_16dp"
             android:layout_marginRight="@dimen/size_16dp"
-            android:layout_marginTop="@dimen/size_8dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="6"
                 android:orientation="vertical">
 
                 <TextView
@@ -27,13 +31,14 @@
                     android:maxLines="1"
                     android:text="You bought garry and groundnut"
                     android:textColor="@color/colorGrey800"
-                    android:textSize="@dimen/text_size18" />
+                    android:textSize="@dimen/text_size14" />
 
                 <TextView
+                    android:textSize="@dimen/text_size12"
                     android:id="@+id/transaction_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_8dp"
+                    android:layout_marginTop="@dimen/size_16dp"
                     android:text="12/17/2018"
                     android:textColor="@color/colorGrey600" />
             </LinearLayout>
@@ -50,18 +55,24 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:text="Credit"
-                    android:textSize="@dimen/text_size16" />
+                    android:textSize="@dimen/text_size14" />
 
                 <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:id="@+id/transaction_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:layout_marginTop="@dimen/size_8dp"
+                    android:layout_marginTop="@dimen/size_16dp"
                     android:text="NGN5000"
-                    android:textSize="@dimen/text_size18" />
+                    android:textSize="@dimen/text_size16" />
             </LinearLayout>
         </LinearLayout>
-
+        <View
+            android:background="@color/colorGrey400"
+            android:layout_below="@id/row_items_container"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
     </RelativeLayout>
 </layout>
