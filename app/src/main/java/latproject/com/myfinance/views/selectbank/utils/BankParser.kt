@@ -1,4 +1,4 @@
-package latproject.com.myfinance.views.selectbank
+package latproject.com.myfinance.views.selectbank.utils
 
 import android.widget.ImageView
 import latproject.com.myfinance.R

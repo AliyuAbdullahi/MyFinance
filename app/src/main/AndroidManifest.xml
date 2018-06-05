@@ -17,13 +17,17 @@
         <activity
             android:name=".views.homescreen.activities.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity
-            android:name=".views.transactions.activities.Transactions"
-            android:label="@string/title_activity_transactions"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.transactions.activities.TransactionsActivity"
+            android:label="@string/title_activity_transactions"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <receiver android:name=".core.services.sms.SmsReceiver">
             <intent-filter>
@@ -32,17 +36,17 @@
         </receiver>
 
         <activity
-            android:name=".views.selectbank.activities.SelectBank"
+            android:name=".views.selectbank.activities.SelectBankActivity"
             android:label="@string/title_activity_select_bank"
-            android:theme="@style/AppTheme.NoActionBar">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.budgets.activities.BudgetsActivity"
+            android:label="@string/title_activity_budgets"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.transactiondetails.activities.TransactionDetailsActivity"
+            android:label="@string/title_activity_transaction_details"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
