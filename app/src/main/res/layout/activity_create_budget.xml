@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/text_size16"
+                android:text="Base: 250,000"
+                android:textSize="@dimen/text_size16" />
+
+            <ImageView
+                android:layout_width="@dimen/size_40dp"
+                android:layout_height="@dimen/size_40dp"
+                android:layout_gravity="right" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:layout_marginTop="@dimen/size_16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/selected_bank_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Selected Bank:  " />
+
+            <TextView
+                android:textColor="@color/colorGrey800"
+                android:id="@+id/bank_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/selected_bank_title"
+                android:text="Stanbic IBTC" />
+
+            <Button
+                android:id="@+id/change_bank"
+                android:textColor="@color/colorTabActive"
+                android:background="?attr/selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:text="Change" />
+        </RelativeLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_20dp"
+            android:layout_marginRight="@dimen/size_20dp"
+            android:layout_marginTop="@dimen/size_32dp"
+            android:background="@drawable/curved_edge_border"
+            android:gravity="center_horizontal"
+            android:hint="Budget amount"
+            android:inputType="numberDecimal"
+            android:padding="@dimen/size_20dp"
+            android:textSize="@dimen/text_size24" />
+
+        <EditText
+            android:id="@+id/number_of_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_20dp"
+            android:layout_marginRight="@dimen/size_20dp"
+            android:layout_marginTop="@dimen/size_20dp"
+            android:background="@drawable/curved_edge_border"
+            android:gravity="center_horizontal"
+            android:hint="How many days?"
+            android:inputType="number"
+            android:padding="@dimen/size_20dp" />
+
+        <Button
+            android:id="@+id/create_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_32dp"
+            android:background="@drawable/create_button_not_active"
+            android:paddingLeft="@dimen/size_32dp"
+            android:paddingRight="@dimen/size_32dp"
+            android:text="Create"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</layout>

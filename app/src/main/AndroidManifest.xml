@@ -46,6 +46,10 @@
         <activity
             android:name=".views.transactiondetails.activities.TransactionDetailsActivity"
             android:label="@string/title_activity_transaction_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.budgets.activities.CreateBudgetActivity"
+            android:label="@string/title_activity_create_budget"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

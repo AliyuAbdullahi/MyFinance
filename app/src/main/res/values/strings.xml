@@ -12,4 +12,6 @@
     <string name="amount">NGN%1.2f</string>
     <string name="credit">Credit</string>
     <string name="debit">Debit</string>
+    <string name="budgets">Budgets</string>
+    <string name="title_activity_create_budget">CreateBudgetActivity</string>
 </resources>
