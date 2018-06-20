@@ -10,10 +10,8 @@ class User {
     var email: String = ""
     var name: String = ""
     var bank: String = ""
-
-    override fun toString(): String {
-        return "User(id='$id', name='$name', bank='$bank')"
-    }
+    var bankTextColor: String = ""
+    var bankBackGroundColor: String = ""
 
     override fun equals(other: Any?): Boolean {
         val targetUser = other as User
@@ -32,4 +30,10 @@ class User {
         result = 31 * result + bank.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "User(id='$id', email='$email', name='$name', bank='$bank', bankTextColor='$bankTextColor', bankBackGroundColor='$bankBackGroundColor')"
+    }
+
+
 }

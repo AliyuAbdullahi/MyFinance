@@ -54,6 +54,7 @@ class SelectBankActivity : CoreActivity(), BankListAdapter.OnBankSelectedListene
 
     private var bank: Bank? = null
     val user = User()
+
     override fun onBankSelected(bank: Bank) {
         this.bank = bank
 
@@ -61,6 +62,10 @@ class SelectBankActivity : CoreActivity(), BankListAdapter.OnBankSelectedListene
             val bankName = bank.name
             user.bank = bankName!!
             user.id = "_User_${UUID.randomUUID()}"
+            if (bank.textColor != null)
+                user.bankTextColor = bank.textColor!!
+            if (bank.backgroundColor != null)
+                user.bankBackGroundColor = bank.backgroundColor!!
         }
 
         val dialogTitle = getString(R.string.bank_selection_confirmation)

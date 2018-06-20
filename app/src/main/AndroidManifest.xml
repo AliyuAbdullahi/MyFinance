@@ -40,7 +40,7 @@
             android:label="@string/title_activity_select_bank"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.budgets.activities.BudgetsActivity"
+            android:name=".views.budgets.activities.BudgetsListActivity"
             android:label="@string/title_activity_budgets"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -1,6 +1,7 @@
 package latproject.com.myfinance.core.datastore
 
 import android.content.Context
+import latproject.com.myfinance.core.model.Bank
 import latproject.com.myfinance.core.room.Budget
 import latproject.com.myfinance.core.room.User
 import latproject.com.myfinance.core.room.BankTransaction
@@ -51,8 +52,16 @@ class DataStore(context: Context) {
         return offlineStore.getBudgetsForBank(bankName)
     }
 
+    fun createBudget(budget: Budget) {
+        offlineStore.addBudget(budget)
+    }
+
     fun getBudgets(): List<Budget>? {
         return offlineStore.getBudgets()
+    }
+
+    fun getBankColor(): String? {
+        return offlineStore.getUser()?.bankColor
     }
 
     fun getBank() : String? {

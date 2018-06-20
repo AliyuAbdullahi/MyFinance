@@ -62,4 +62,8 @@ class OfflineStore(context: Context) {
     fun deleteBudget(budget: Budget) {
         db?.getBudgetDataAccess()?.deleteBudget(budget)
     }
+
+    fun addBudget(budget: Budget) {
+        db?.getBudgetDataAccess()?.createBudget(budget)
+    }
 }
