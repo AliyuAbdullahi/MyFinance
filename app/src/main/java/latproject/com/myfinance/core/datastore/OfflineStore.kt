@@ -1,69 +1,81 @@
 package latproject.com.myfinance.core.datastore
 
-import android.arch.persistence.room.Room
 import android.content.Context
-import latproject.com.myfinance.core.room.Budget
-import latproject.com.myfinance.core.room.User
-import latproject.com.myfinance.core.room.BankTransaction
-import latproject.com.myfinance.core.room.BankTransactionDataBase
+import io.realm.Realm
+import latproject.com.myfinance.core.datastore.realm.RealmManager
+import latproject.com.myfinance.core.model.modelparser.ModelMapper
+import latproject.com.myfinance.core.room.*
 
 class OfflineStore(context: Context) {
-    var db: BankTransactionDataBase? = null
-    init {
-        db = Room.databaseBuilder(context, BankTransactionDataBase::class.java, "finance_db")
-                .allowMainThreadQueries().build()
-    }
+    val realmManager = RealmManager(Realm.getDefaultInstance())
 
     fun addUser(user: User) {
-        val currentUser = db?.getUserDataAccess()?.getUser()
-        if(currentUser != null && currentUser != user) {
-            db?.getUserDataAccess()?.deleteUser(currentUser)
-
-            db?.getUserDataAccess()?.addUser(user)
-        } else {
-            db?.getUserDataAccess()?.addUser(user)
-        }
+        realmManager.save(user)
     }
 
     fun updateUser(user: User) {
-        db?.getUserDataAccess()?.updateUser(user)
+        realmManager.saveOrUpdate(user)
     }
 
-    fun addTransaction(transaction: BankTransaction) {
-        val allTransactions = db?.getTransactionsDataAccess()?.getTransactions()
-
-        if(allTransactions != null) {
-            if(!allTransactions.any { it == transaction }) {
-                db?.getTransactionsDataAccess()?.addTransaction(transaction)
-            }
-        }
+    fun addTransaction(realmBankTransaction: RealmBankTransaction) {
+        realmManager.saveOrUpdate(realmBankTransaction)
     }
 
-    fun getUser():User? {
-        return db?.getUserDataAccess()?.getUser()
+    fun getUser(): User? {
+        return realmManager.findOne(User::class.java)
     }
 
-    fun getAllTransactionsForABank(bankName: String): List<BankTransaction>? {
-        return db?.getTransactionsDataAccess()?.getTransactionsForBank(bankName)
+    fun getAllTransactionsForABank(bankName: String): List<RealmBankTransaction>? {
+        val allTransactions = realmManager.findAllByClass(RealmBankTransaction::class.java)
+
+        return allTransactions.filter { it.bank.toLowerCase().contains(bankName.substring(0, bankName.length/2).toLowerCase()) }
     }
 
-    fun getAllTransactions(): List<BankTransaction>? {
-        return db?.getTransactionsDataAccess()?.getTransactions()
+    fun getAllTransactions(): List<RealmBankTransaction>? {
+        return realmManager.findAllByClass(RealmBankTransaction::class.java)
     }
 
     fun getBudgets(): List<Budget>? {
-        return db?.getBudgetDataAccess()?.getAllBudgets()
+        return realmManager.findAllByClass(Budget::class.java)
     }
 
     fun getBudgetsForBank(bankName: String): List<Budget>? {
-        return db?.getBudgetDataAccess()?.getBudgetForABank(bankName)
+        return realmManager.findAllByClass(Budget::class.java).filter { it.bank == bankName }
+    }
+
+    fun deleteBudget(budget: Budget, onBudgetDeleted: (deleted: Boolean) -> Unit) {
+        val budgetId = budget.id
+        val budgets = realmManager.findAllByClass(Budget::class.java)
+        val budgetToDelete = budgets.firstOrNull { it.id == budget.id }
+        if (budgetToDelete != null)
+            realmManager.delete(budgetToDelete)
+
+        val all = realmManager.findAllByClass(Budget::class.java)
+        val searchParam = all.find { it.id == budgetId }
+
+        if (searchParam == null) {
+            onBudgetDeleted(true)
+        } else {
+            onBudgetDeleted(false)
+        }
     }
 
     fun deleteBudget(budget: Budget) {
-        db?.getBudgetDataAccess()?.deleteBudget(budget)
+        val budgets = realmManager.findAllByClass(Budget::class.java)
+        val budgetToDelete = budgets.firstOrNull { it.id == budget.id }
+        if (budgetToDelete != null)
+            realmManager.delete(budgetToDelete)
+    }
+
+    fun dropAllTables() {
+        realmManager.deleteAll()
     }
 
     fun addBudget(budget: Budget) {
-        db?.getBudgetDataAccess()?.createBudget(budget)
+        realmManager.saveOrUpdate(budget)
+    }
+
+    fun save(list: List<RealmBankTransaction>) {
+        realmManager.saveOrUpdate(list)
     }
 }

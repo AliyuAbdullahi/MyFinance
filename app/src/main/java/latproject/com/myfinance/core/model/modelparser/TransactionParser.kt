@@ -1,12 +1,13 @@
 package latproject.com.myfinance.core.model.modelparser
 
 import latproject.com.myfinance.core.model.SmsMessage
-import latproject.com.myfinance.core.room.BankTransaction
+import latproject.com.myfinance.core.room.RealmBankTransaction
+import timber.log.Timber
 
 class TransactionParser {
     companion object {
-        fun parseToTransaction(bank: String, sms: SmsMessage): BankTransaction? {
-            var bankTransaction: BankTransaction?
+        fun parseToTransaction(bank: String, sms: SmsMessage): RealmBankTransaction? {
+            val bankTransaction: RealmBankTransaction?
 
             if (bank.toLowerCase().contains("stanbic")) {
                 bankTransaction = parseForStanbicIBTC(sms)
@@ -26,10 +27,12 @@ class TransactionParser {
             return null
         }
 
-        private fun parseForStanbicIBTC(smsMessage: SmsMessage): BankTransaction {
+        private fun parseForStanbicIBTC(smsMessage: SmsMessage): RealmBankTransaction {
             val message = smsMessage.body
 
-            val bankTransaction = BankTransaction()
+            Timber.d("MESSAGE $message")
+
+            val bankTransaction = RealmBankTransaction()
 
             val date = smsMessage.date
 
@@ -52,7 +55,7 @@ class TransactionParser {
                 bankTransaction.details = messageDetails
                 bankTransaction.date = date
                 bankTransaction.amount = amount.toDouble()
-
+                bankTransaction.id = "$type$amount$date"
                 bankTransaction.type = type
                 bankTransaction.bank = smsMessage.from
                 bankTransaction.balanceAfterTransaction = balanceAfterTransaction.toDouble()
@@ -61,7 +64,7 @@ class TransactionParser {
             return bankTransaction
         }
 
-        private fun parseForUBA(sms: SmsMessage): BankTransaction {
+        private fun parseForUBA(sms: SmsMessage): RealmBankTransaction {
             val message = sms.body
 
             val type = if (message.toLowerCase().contains("debit".toLowerCase())) "debit" else "credit"
@@ -81,7 +84,7 @@ class TransactionParser {
 
             val balanceAfterTrx = message.substring(startIndexForBalanceAfterTrx, endIndexForBalanceAfterTrx)
 
-            val bankTransaction = BankTransaction()
+            val bankTransaction = RealmBankTransaction()
             bankTransaction.type = type
             bankTransaction.amount = amount.toDouble()
             bankTransaction.details = details
@@ -91,9 +94,9 @@ class TransactionParser {
             return bankTransaction
         }
 
-        private fun parseForUnion(sms: SmsMessage): BankTransaction {
+        private fun parseForUnion(sms: SmsMessage): RealmBankTransaction {
             val message = sms.body
-            val bankTransaction = BankTransaction()
+            val bankTransaction = RealmBankTransaction()
 
             val type = if (message.contains("debit")) "debit" else if (message.contains("credit")) "credit" else ""
 

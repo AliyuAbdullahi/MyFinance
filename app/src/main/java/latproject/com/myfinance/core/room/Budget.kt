@@ -1,10 +1,9 @@
 package latproject.com.myfinance.core.room
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-@Entity
-class Budget {
+open class Budget: RealmObject() {
     @PrimaryKey
     var id: String = ""
     var amount: Double = 0.0

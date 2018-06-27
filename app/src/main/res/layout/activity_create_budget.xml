@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="latproject.com.myfinance.views.budgets.viewmodels.CreateBudgetViewModel" />
+        <variable
+            name="handler"
+            type="latproject.com.myfinance.views.budgets.activities.CreateBudgetActivity.CreateBudgetHandler"/>
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,13 +21,28 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginRight="@dimen/text_size16"
-                android:text="Base: 250,000"
-                android:textSize="@dimen/text_size16" />
+                android:layout_marginRight="@dimen/size_16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Base:"
+                    android:textSize="@dimen/text_size16" />
+
+                <TextView
+                    android:text="@{viewModel.currentBase}"
+                    android:id="@+id/base_balace"
+                    android:layout_marginLeft="@dimen/size_8dp"
+                    android:textSize="@dimen/text_size16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
 
             <ImageView
                 android:layout_width="@dimen/size_40dp"
@@ -42,26 +67,27 @@
                 android:text="Selected Bank:  " />
 
             <TextView
-                android:textColor="@color/colorGrey800"
                 android:id="@+id/bank_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/selected_bank_title"
-                android:text="Stanbic IBTC" />
+                android:text="Stanbic IBTC"
+                android:textColor="@color/colorGrey800" />
 
             <Button
                 android:id="@+id/change_bank"
-                android:textColor="@color/colorTabActive"
-                android:background="?attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
-                android:text="Change" />
+                android:background="?attr/selectableItemBackground"
+                android:text="Change"
+                android:textColor="@color/colorTabActive" />
         </RelativeLayout>
 
         <EditText
+            android:id="@+id/budget_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_20dp"
@@ -88,6 +114,7 @@
             android:padding="@dimen/size_20dp" />
 
         <Button
+            android:onClick="@{handler::createBudget}"
             android:id="@+id/create_budget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

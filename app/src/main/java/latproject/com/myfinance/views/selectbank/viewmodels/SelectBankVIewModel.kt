@@ -29,6 +29,4 @@ class SelectBankVIewModel(context: Context) : CoreViewModel(context) {
             field = value
             notifyPropertyChanged(BR.dialogShowing)
         }
-
-
 }

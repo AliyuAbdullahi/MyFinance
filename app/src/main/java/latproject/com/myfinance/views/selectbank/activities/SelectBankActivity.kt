@@ -6,7 +6,8 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.navigateTo
-import latproject.com.myfinance.core.model.Bank
+import latproject.com.myfinance.core.model.RealmBank
+import latproject.com.myfinance.core.model.modelparser.ModelMapper
 import latproject.com.myfinance.core.room.User
 import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivitySelectBankBinding
@@ -44,18 +45,20 @@ class SelectBankActivity : CoreActivity(), BankListAdapter.OnBankSelectedListene
         binding.bankList.adapter = adapter
 
         viewModel.getAllBanks(this) {
-            adapter.addBanks(it)
+            adapter.addBanks(ModelMapper.map(it))
         }
     }
 
     private fun bankSelected(): Boolean {
-        return viewModel.dataStore.getUser() != null && viewModel.dataStore.getUser()!!.bank.isNotEmpty()
+        return viewModel.dataStore.getUser() != null
+                && viewModel.dataStore.getUser()!!.bank != null
+                && viewModel.dataStore.getUser()!!.bank!!.isNotEmpty()
     }
 
-    private var bank: Bank? = null
+    private var bank: RealmBank? = null
     val user = User()
 
-    override fun onBankSelected(bank: Bank) {
+    override fun onBankSelected(bank: RealmBank) {
         this.bank = bank
 
         if (bank.name != null) {

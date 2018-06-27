@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import latproject.com.myfinance.R
-import latproject.com.myfinance.databinding.LayoutTransactionListItemBinding
-import latproject.com.myfinance.core.room.BankTransaction
+import latproject.com.myfinance.core.room.RealmBankTransaction
 import latproject.com.myfinance.core.utils.FormattingUtility
+import latproject.com.myfinance.databinding.LayoutTransactionListItemBinding
 
 class TransactionListItemAdapter : RecyclerView.Adapter<TransactionListItemAdapter.TransactionItemViewHolder>() {
-    var bankTransactions = mutableListOf<BankTransaction?>()
+    var bankTransactions = mutableListOf<RealmBankTransaction?>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -20,12 +20,12 @@ class TransactionListItemAdapter : RecyclerView.Adapter<TransactionListItemAdapt
     lateinit var onTransactionClickedListener: OnTransactionClickedListener
 
 
-    fun setTransactions(bankTransaction: MutableList<BankTransaction?>) {
+    fun setTransactions(bankTransaction: MutableList<RealmBankTransaction?>) {
         this.bankTransactions.addAll(bankTransaction)
         notifyDataSetChanged()
     }
 
-    fun addTransaction(bankTransaction: BankTransaction) {
+    fun addTransaction(bankTransaction: RealmBankTransaction) {
         this.bankTransactions.add(bankTransaction)
         notifyItemInserted(bankTransactions.size)
     }
@@ -48,7 +48,7 @@ class TransactionListItemAdapter : RecyclerView.Adapter<TransactionListItemAdapt
     }
 
     inner class TransactionItemViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        private lateinit var bankTransaction: BankTransaction
+        private lateinit var bankTransaction: RealmBankTransaction
 
         override fun onClick(p0: View?) {
             onTransactionClickedListener.onTransactionClicked(bankTransaction)
@@ -62,7 +62,7 @@ class TransactionListItemAdapter : RecyclerView.Adapter<TransactionListItemAdapt
             binding.rowItemsContainer.setOnClickListener(this)
         }
 
-        fun bindTo(bankTransaction: BankTransaction) {
+        fun bindTo(bankTransaction: RealmBankTransaction) {
             this.bankTransaction = bankTransaction
             parseDebitOrCredit(bankTransaction.isCredit)
             binding.transactionAmount.text = binding.root.context.resources.getString(R.string.amount, bankTransaction.amount)
@@ -82,6 +82,6 @@ class TransactionListItemAdapter : RecyclerView.Adapter<TransactionListItemAdapt
     }
 
     interface OnTransactionClickedListener {
-        fun onTransactionClicked(bankTransaction: BankTransaction)
+        fun onTransactionClicked(bankTransaction: RealmBankTransaction)
     }
 }

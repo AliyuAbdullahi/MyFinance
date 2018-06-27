@@ -24,9 +24,10 @@ public class SmsReceiver extends BroadcastReceiver {
             //Check the sender to filter messages which we require to read
 
             String messageBody = smsMessage.getMessageBody();
-
+            if(messageBody != null) {
+                mListener.onMessageReceived(messageBody);
+            }
             //Pass the message text to interface
-            mListener.onMessageReceived(messageBody);
         }
 
     }

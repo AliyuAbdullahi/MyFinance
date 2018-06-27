@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.model.Bank
+import latproject.com.myfinance.core.model.RealmBank
 import latproject.com.myfinance.databinding.LayoutBankCardBinding
 import latproject.com.myfinance.views.selectbank.utils.BankParser
 
 class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListViewHolder>() {
-    val banks: MutableList<Bank> = mutableListOf()
+    val banks: MutableList<RealmBank> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BankListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_bank_card, parent, false)
@@ -19,7 +20,7 @@ class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListViewHolder>
         return BankListViewHolder(view)
     }
 
-    fun addBanks(bankList: List<Bank>) {
+    fun addBanks(bankList: List<RealmBank>) {
         banks.addAll(bankList)
         notifyDataSetChanged()
     }
@@ -39,8 +40,8 @@ class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListViewHolder>
     }
 
     inner class BankListViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        var bank: Bank? = null
-        var binding: LayoutBankCardBinding
+        var bank: RealmBank? = null
+        var binding: LayoutBankCardBinding = LayoutBankCardBinding.bind(view)
 
         override fun onClick(p0: View?) {
             if (onBankSelectedListener != null && bank != null) {
@@ -49,13 +50,12 @@ class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListViewHolder>
         }
 
         init {
-            binding = LayoutBankCardBinding.bind(view)
             binding.root.setOnClickListener(this)
             binding.bankLog.setOnClickListener(this)
             binding.bankName.setOnClickListener(this)
         }
 
-        fun onBindTo(bank: Bank) {
+        fun onBindTo(bank: RealmBank) {
             this.bank = bank
             binding.bankName.text = bank.name
             BankParser.parse(bank, binding.bankLog)
@@ -64,6 +64,6 @@ class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListViewHolder>
     }
 
     interface OnBankSelectedListener {
-        fun onBankSelected(bank: Bank)
+        fun onBankSelected(bank: RealmBank)
     }
 }
