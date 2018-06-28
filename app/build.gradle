@@ -87,6 +87,9 @@ dependencies {
     // Reactive Extension Bindings for Kotlin
     implementation 'io.reactivex:rxkotlin:0.60.0'
 
+    implementation 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+
     // RxLifecycle
     implementation 'com.trello:rxlifecycle-kotlin:0.6.1'
 }

@@ -1,13 +1,25 @@
 package latproject.com.myfinance.core.view
 
+import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.MenuItem
 import android.view.WindowManager
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import latproject.com.myfinance.R
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
-open class CoreActivity: RxAppCompatActivity() {
+open class CoreActivity : RxAppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/fonts/SofiaPro_Medium.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build())
+    }
 
     fun setStatusBarColor(color: Int) {
         runOnUiThread {
@@ -22,10 +34,14 @@ open class CoreActivity: RxAppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId) {
+        when (item?.itemId) {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
     override fun onStart() {

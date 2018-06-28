@@ -29,14 +29,20 @@
                 android:layout_height="200dp"
                 android:layout_centerHorizontal="true" />
 
-            <TextView
-                android:id="@+id/budget_percent_used"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <RelativeLayout
                 android:layout_centerInParent="true"
-                android:text="80%"
-                android:textSize="50sp"
-                android:visibility="gone" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:paddingBottom="@dimen/size_8dp"
+                    android:id="@+id/budget_percent_used"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="50sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
         </RelativeLayout>
 
         <LinearLayout

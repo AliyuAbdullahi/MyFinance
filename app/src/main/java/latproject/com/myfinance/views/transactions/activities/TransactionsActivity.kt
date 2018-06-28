@@ -50,7 +50,8 @@ class TransactionsActivity : CoreActivity(), TransactionListItemAdapter.OnTransa
     private fun loadTransactions() {
         val bankName = viewModel.getBank()
         if (bankName != null) {
-            viewModel.getAllTransactionsForBank(bankName)?.forEach {
+            val list = viewModel.getAllTransactionsForBank(bankName)?.reversed()
+            list?.forEach {
                 bankTransactionsAdapter.addTransaction(it)
             }
         }
