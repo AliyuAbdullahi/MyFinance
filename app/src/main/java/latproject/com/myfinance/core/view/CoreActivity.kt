@@ -2,6 +2,7 @@ package latproject.com.myfinance.core.view
 
 import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.view.MenuItem
 import android.view.WindowManager
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import latproject.com.myfinance.R
@@ -18,6 +19,13 @@ open class CoreActivity: RxAppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            android.R.id.home -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {

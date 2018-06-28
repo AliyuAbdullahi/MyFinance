@@ -16,4 +16,5 @@ class TransactionsViewModel(context: Context) : CoreViewModel(context) {
     fun getBank(): String? {
         return dataStore.getBank()
     }
+
 }

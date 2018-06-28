@@ -66,7 +66,7 @@ class TransactionListItemAdapter : RecyclerView.Adapter<TransactionListItemAdapt
             this.bankTransaction = bankTransaction
             parseDebitOrCredit(bankTransaction.isCredit)
             binding.transactionAmount.text = binding.root.context.resources.getString(R.string.amount, bankTransaction.amount)
-            binding.transactionSummary.text = bankTransaction.details
+            binding.transactionSummary.text = bankTransaction.details.replace("  ", " ")
             binding.transactionDate.text = FormattingUtility.getDateTime(bankTransaction.date)
         }
 

@@ -15,8 +15,10 @@ import latproject.com.myfinance.core.services.sms.SmsListener
 import latproject.com.myfinance.core.services.sms.SmsReceiver
 import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivityHomeBinding
+import latproject.com.myfinance.views.budgets.activities.BudgetsListActivity
 import latproject.com.myfinance.views.budgets.activities.CreateBudgetActivity
 import latproject.com.myfinance.views.homescreen.viewmodels.HomeActivityViewModel
+import latproject.com.myfinance.views.transactions.activities.TransactionsActivity
 
 class HomeActivity : CoreActivity(), SmsListener {
     lateinit var binding: ActivityHomeBinding
@@ -56,7 +58,9 @@ class HomeActivity : CoreActivity(), SmsListener {
 
     override fun onResume() {
         super.onResume()
-        cacheTransactions()
+        Handler().postDelayed({
+            cacheTransactions()
+        }, 2000)
     }
 
     private fun cacheTransactions() {
@@ -104,7 +108,7 @@ class HomeActivity : CoreActivity(), SmsListener {
         }, 2500)
 
         if (valueInPercent <= 0.0) {
-            binding.budgetProgressBar.setProgressWithAnimation(valueInPercent.toFloat() + 2, 2500)
+            binding.budgetProgressBar.setProgressWithAnimation(valueInPercent.toFloat() + 1, 2200)
         } else {
             if (valueInPercent >= 90) {
                 binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_bad)
@@ -171,18 +175,25 @@ class HomeActivity : CoreActivity(), SmsListener {
         navigateTo<CreateBudgetActivity>()
     }
 
+    fun navigateToTransactions() {
+        navigateTo<TransactionsActivity>()
+    }
+
+    fun navigateToBudgets() {
+        navigateTo<BudgetsListActivity>()
+    }
+
     inner class HomeActivityHandler {
         fun onCreateBudgetClicked(view: View) {
             navigateToBudgetCreationPage()
         }
 
         fun onTransactionsClicked(view: View) {
-            makeToast("Transactions clicked")
+            navigateToTransactions()
         }
 
         fun onBudgetsClicked(view: View) {
-            makeToast("Budgets list clicked")
-
+            navigateToBudgets()
         }
     }
 }

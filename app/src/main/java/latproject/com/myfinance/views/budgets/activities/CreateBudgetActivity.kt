@@ -134,28 +134,6 @@ class CreateBudgetActivity : CoreActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadTransactions()
-    }
-
-    private fun loadTransactions() {
-        val bankName = viewModel.getBankName()
-        val all = ArrayList<RealmBankTransaction>()
-
-        for (loadTransaction in viewModel.loadTransactions(bankName!!)) {
-            if(loadTransaction != null) {
-                all.add(loadTransaction)
-            }
-        }
-
-        all.forEach { viewModel.saveRealmTransaction(it) }
-
-        Handler().postDelayed({
-            val allSavedTransactions = viewModel.getTransactionsForBank(bankName)
-        }, 10000)
-    }
-
     fun checkForFields(fieldsValid: (valid: Boolean) -> Unit) {
         if (binding.budgetAmount.text.isEmpty()) {
             binding.budgetAmount.error = getString(R.string.enter_valid_budget)

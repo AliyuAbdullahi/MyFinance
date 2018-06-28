@@ -5,25 +5,41 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.widget.Toast
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.Constants
 import latproject.com.myfinance.core.room.RealmBankTransaction
+import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivityTransactionDetailsBinding
 import latproject.com.myfinance.views.transactiondetails.viewmodels.TransactionDetailsViewModel
 
-class TransactionDetailsActivity : AppCompatActivity() {
+class TransactionDetailsActivity : CoreActivity() {
     lateinit var binding: ActivityTransactionDetailsBinding
     private var appToggleState: State = State.EXPANDED
     private var viewModel = TransactionDetailsViewModel(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_transaction_details)
-
+        setSupportActionBar(binding.toolbar)
+        bindStatusBar()
         obtainTransaction {
             bind(it)
             binding.collapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, android.R.color.transparent))
             checkScrollChange()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setStatusBarColor(R.color.white)
+    }
+
+    private fun bindStatusBar() {
+        val actionbar = supportActionBar
+        if(actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true)
+            actionbar.setDisplayShowTitleEnabled(false)
         }
     }
 

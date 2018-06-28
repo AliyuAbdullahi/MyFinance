@@ -23,27 +23,6 @@ open class CoreViewModel(val context: Context): BaseObservable() {
         return getTransactions()?.filter { it.bank.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length/2))}
     }
 
-    fun getMessages(bankName: String): List<SmsMessage> {
-        val smsReader = SmsReader(context)
-
-        return smsReader.getMessage().filter { it.from.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length/2)) }
-    }
-
-
-    fun loadTransactions(bankName: String):MutableList<RealmBankTransaction?> {
-        val bankTransactions = mutableListOf<RealmBankTransaction?>()
-
-        getMessages(bankName).forEach {
-            val currentTransaction = TransactionParser.parseToTransaction(bankName, it)
-            if(currentTransaction != null) {
-                bankTransactions.add(currentTransaction)
-                dataStore.addTransaction(currentTransaction)
-            }
-        }
-
-        return bankTransactions
-    }
-
     fun getBankName(): String? {
         return dataStore.getBank()
     }

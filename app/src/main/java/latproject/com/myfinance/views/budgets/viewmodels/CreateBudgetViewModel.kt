@@ -22,6 +22,10 @@ class CreateBudgetViewModel(context: Context) : CoreViewModel(context) {
         return base ?: 0.00
     }
 
+    fun getAllTransactionsForBank(bankName: String): List<RealmBankTransaction>? {
+        return dataStore.getTransactionsForBank(bankName)
+    }
+
     fun getAllBalance(): Int? {
         return dataStore.getAllTransactions()?.size
     }

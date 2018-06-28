@@ -4,6 +4,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.MenuItem
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.Constants
 import latproject.com.myfinance.core.room.RealmBankTransaction
@@ -22,11 +23,21 @@ class TransactionsActivity : CoreActivity(), TransactionListItemAdapter.OnTransa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transactions)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_transactions)
+        setSupportActionBar(binding.toolbar)
+        bindStatusBar()
         viewModel = TransactionsViewModel(this)
 
         initRecyclerView()
 
         loadTransactions()
+    }
+
+    private fun bindStatusBar() {
+        val actionbar = supportActionBar
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true)
+            actionbar.setDisplayShowTitleEnabled(false)
+        }
     }
 
     private fun initRecyclerView() {
@@ -39,9 +50,8 @@ class TransactionsActivity : CoreActivity(), TransactionListItemAdapter.OnTransa
     private fun loadTransactions() {
         val bankName = viewModel.getBank()
         if (bankName != null) {
-            viewModel.loadTransactions(bankName).forEach {
-                if (it != null)
-                    bankTransactionsAdapter.addTransaction(it)
+            viewModel.getAllTransactionsForBank(bankName)?.forEach {
+                bankTransactionsAdapter.addTransaction(it)
             }
         }
     }
