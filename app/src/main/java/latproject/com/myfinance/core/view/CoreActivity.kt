@@ -2,9 +2,9 @@ package latproject.com.myfinance.core.view
 
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
+import latproject.com.myfinance.R
 
 open class CoreActivity: RxAppCompatActivity() {
 
@@ -18,5 +18,10 @@ open class CoreActivity: RxAppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setStatusBarColor(R.color.white)
     }
 }

@@ -45,15 +45,18 @@ class HomeActivity : CoreActivity(), SmsListener {
         if (budgets == null || budgets.isEmpty()) {
             setUpProgress(0.0, 0.0)
         } else {
-            val activeBudget = budgets.first { it.active }
-            setUpProgress(activeBudget.amountSpent, activeBudget.amount)
+            val bankName = viewModel.getBankName()
+            val activeBudget = budgets.last { it.active }
+            val allTrxs = viewModel
+                    .getTransactionsForBank(bankName!!)?.filter { it.date > activeBudget.dateSet && !it.isCredit }?.map { it.amount }?.sum()
+
+            setUpProgress(allTrxs ?: 0.0, activeBudget.amount)
         }
     }
 
     override fun onResume() {
         super.onResume()
         cacheTransactions()
-        fetchBudget()
     }
 
     private fun cacheTransactions() {
@@ -73,27 +76,55 @@ class HomeActivity : CoreActivity(), SmsListener {
     }
 
     private fun setUpProgress(amountSpent: Double, amount: Double) {
+        var offset = 0.0
+        var valueInPercent = amountSpent / amount * 100
 
-        val valueInPercent = amountSpent / amount * 100
+        if (valueInPercent > 100) {
+            offset = valueInPercent - 100
+            valueInPercent = 100.0
+        }
 
-        binding.budgetProgressBar.backgroundColor = ContextCompat.getColor(this, R.color.budget_default)
-        binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_fine)
+        //cacheOffsetOnBudgetSoYouCanWorkWithItInNextBudget
 
         binding.moneySpent.text = "$amountSpent"
 
         binding.baseAmount.text = "$amount"
 
         binding.budgetProgressBar.progressBarWidth = resources.getDimension(R.dimen.size_16dp)
+        binding.budgetProgressBar.backgroundColor = ContextCompat.getColor(this, R.color.budget_default)
+        binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_fine)
+
         Handler().postDelayed({
             binding.budgetPercentUsed.visibility = View.VISIBLE
-            if (amount == 0.0) {
+            if (amountSpent == 0.0) {
                 binding.budgetPercentUsed.text = "-"
             } else {
-                binding.budgetPercentUsed.text = "$valueInPercent%"
+                binding.budgetPercentUsed.text = "${String.format("%.0f", valueInPercent)}%"
             }
         }, 2500)
 
-        binding.budgetProgressBar.setProgressWithAnimation(valueInPercent.toFloat(), 2500)
+        if (valueInPercent <= 0.0) {
+            binding.budgetProgressBar.setProgressWithAnimation(valueInPercent.toFloat() + 2, 2500)
+        } else {
+            if (valueInPercent >= 90) {
+                binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_bad)
+            }
+            if (valueInPercent >= 70) {
+                binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_going_bad)
+            }
+
+            if (valueInPercent >= 50) {
+                binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_weird)
+            }
+
+            if (valueInPercent >= 30) {
+                binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_going_off)
+            }
+            if (valueInPercent < 30) {
+                binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_fine)
+            }
+            binding.budgetProgressBar.setProgressWithAnimation(valueInPercent.toFloat(), 2500)
+        }
     }
 
     private fun loadTransactions() {
@@ -102,12 +133,14 @@ class HomeActivity : CoreActivity(), SmsListener {
 
         if (permissionManager!!.checkPermissionForSmsRead()) {
             for (loadTransaction in viewModel.loadTransactions(bankName!!)) {
-                if(loadTransaction != null) {
+                if (loadTransaction != null) {
                     all.add(loadTransaction)
                 }
             }
 
             all.forEach { viewModel.saveRealmTransaction(it) }
+
+            fetchBudget()
         } else {
             permissionManager!!.checkPermissionForSmsRead()
         }

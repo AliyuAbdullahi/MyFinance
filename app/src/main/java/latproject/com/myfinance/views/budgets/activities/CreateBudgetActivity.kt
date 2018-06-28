@@ -16,11 +16,12 @@ import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.room.Budget
 import latproject.com.myfinance.core.room.RealmBankTransaction
 import latproject.com.myfinance.core.utils.WeekDay
+import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivityCreateBudgetBinding
 import latproject.com.myfinance.views.budgets.viewmodels.CreateBudgetViewModel
 import java.util.*
 
-class CreateBudgetActivity : AppCompatActivity() {
+class CreateBudgetActivity : CoreActivity() {
     private lateinit var viewModel: CreateBudgetViewModel
     lateinit var binding: ActivityCreateBudgetBinding
     var budgetAmount: Double = 0.0
@@ -32,9 +33,13 @@ class CreateBudgetActivity : AppCompatActivity() {
         viewModel = CreateBudgetViewModel(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_budget)
         binding.viewModel = viewModel
+        binding.handler = CreateBudgetHandler()
         binding.budgetAmount.addTextChangedListener(AmountWatcher())
+        binding.numberOfDays.addTextChangedListener(AmountWatcher())
         showBaseBalanceOption()
     }
+
+    private val oneDay = 86400000L
 
     fun createBudget() {
         val budget = Budget()
@@ -45,7 +50,7 @@ class CreateBudgetActivity : AppCompatActivity() {
         budget.fulfilled = false
         budget.amountSpent = 0.0
         budget.bank = viewModel.getBank() ?: ""
-        budget.dateFinished = WeekDay.getInstance(System.currentTimeMillis()).rangeTo(currentBudgetDuration)
+        budget.dateFinished = System.currentTimeMillis() + oneDay
         budget.durationInDays = currentBudgetDuration
         budget.baseAmount = viewModel.base
 
