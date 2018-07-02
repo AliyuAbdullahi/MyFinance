@@ -9,4 +9,12 @@ class BudgetListViewModel(context: Context): CoreViewModel(context) {
     fun getBudgets(): List<Budget>? {
         return dataStore.getBudgets()
     }
+
+    fun saveBudget(budget: Budget) {
+        dataStore.saveBudget(budget)
+    }
+
+    fun deleteBudget(budget: Budget) {
+        dataStore.deleteBudget(budget)
+    }
 }

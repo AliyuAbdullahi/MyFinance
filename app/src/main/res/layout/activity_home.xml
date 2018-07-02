@@ -16,6 +16,31 @@
         android:background="@color/white75">
 
         <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Stanbic IBTC"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/size_16dp"
+                android:id="@+id/current_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size24" />
+
+            <ImageView
+                android:onClick="@{handler.openSettingsClicked}"
+                android:id="@+id/open_settings_clicked"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/size_16dp"
+                android:src="@drawable/settings_image_selector"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/budget_expenditure_circle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,15 +55,15 @@
                 android:layout_centerHorizontal="true" />
 
             <RelativeLayout
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
 
                 <TextView
-                    android:paddingBottom="@dimen/size_8dp"
                     android:id="@+id/budget_percent_used"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/size_8dp"
                     android:textSize="50sp"
                     android:visibility="gone" />
             </RelativeLayout>
@@ -189,6 +214,14 @@
             </android.support.percent.PercentRelativeLayout>
 
         </android.support.percent.PercentRelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/white_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white75"
+            android:clickable="true"
+            android:visibility="gone" />
 
     </android.support.percent.PercentRelativeLayout>
 </layout>

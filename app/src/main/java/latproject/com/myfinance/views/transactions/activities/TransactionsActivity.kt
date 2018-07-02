@@ -29,7 +29,13 @@ class TransactionsActivity : CoreActivity(), TransactionListItemAdapter.OnTransa
 
         initRecyclerView()
 
+        setToolBarTitle()
+
         loadTransactions()
+    }
+
+    private fun setToolBarTitle() {
+        binding.toolbarTitle.text = "${viewModel.getBank()} (Transactions)"
     }
 
     private fun bindStatusBar() {
@@ -38,6 +44,14 @@ class TransactionsActivity : CoreActivity(), TransactionListItemAdapter.OnTransa
             actionbar.setDisplayHomeAsUpEnabled(true)
             actionbar.setDisplayShowTitleEnabled(false)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            android.R.id.home ->
+                    onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initRecyclerView() {

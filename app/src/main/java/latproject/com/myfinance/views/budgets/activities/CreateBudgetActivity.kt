@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuItem
 import android.view.View
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.clear
@@ -32,11 +33,29 @@ class CreateBudgetActivity : CoreActivity() {
         super.onCreate(savedInstanceState)
         viewModel = CreateBudgetViewModel(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_budget)
+        setSupportActionBar(binding.toolbar)
+        bindStatusBar()
         binding.viewModel = viewModel
         binding.handler = CreateBudgetHandler()
         binding.budgetAmount.addTextChangedListener(AmountWatcher())
         binding.numberOfDays.addTextChangedListener(AmountWatcher())
         showBaseBalanceOption()
+    }
+
+    private fun bindStatusBar() {
+        val actionbar = supportActionBar
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true)
+            actionbar.setDisplayShowTitleEnabled(false)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            android.R.id.home ->
+                onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private val oneDay = 86400000L
@@ -50,7 +69,8 @@ class CreateBudgetActivity : CoreActivity() {
         budget.fulfilled = false
         budget.amountSpent = 0.0
         budget.bank = viewModel.getBank() ?: ""
-        budget.dateFinished = System.currentTimeMillis() + oneDay
+        val numberOfDays = binding.numberOfDays.text.toString().toLong()
+        budget.dateFinished = System.currentTimeMillis() + (oneDay * numberOfDays)
         budget.durationInDays = currentBudgetDuration
         budget.baseAmount = viewModel.base
 

@@ -117,5 +117,9 @@ class RealmManager(private val realm: Realm) {
         executeWithLocalRealm { it.executeTransaction { transaction(it) } }
     }
 
+    fun getRealm(): Realm {
+        return realm
+    }
+
     fun <T : RealmObject?> where(clazz: Class<T>): RealmQuery<T> = realm.where(clazz)
 }

@@ -1,6 +1,7 @@
 package latproject.com.myfinance.core.datastore
 
 import android.content.Context
+import io.realm.Realm
 import latproject.com.myfinance.core.room.*
 
 class DataStore(context: Context) {
@@ -89,4 +90,13 @@ class DataStore(context: Context) {
 
         return true
     }
+
+    fun saveBudget(budget: Budget) {
+        offlineStore.save(budget)
+    }
+
+    fun getRealm(): Realm {
+        return offlineStore.getLocalRealm()
+    }
+
 }

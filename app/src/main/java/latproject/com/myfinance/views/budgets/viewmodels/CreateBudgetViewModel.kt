@@ -67,6 +67,19 @@ class CreateBudgetViewModel(context: Context) : CoreViewModel(context) {
     }
 
     fun createBudget(budget: Budget, onBudgetCreated: (budget: Budget?) -> Unit) {
+        val budgets = dataStore.getBudgets()
+
+        budgets?.forEach {
+            val current = it
+            dataStore.getRealm().executeTransaction {
+                current.active = false
+            }
+        }
+
+        budgets?.forEach {
+            dataStore.saveBudget(it)
+        }
+
         dataStore.createBudget(budget)
 
         val allBudgets = dataStore.getBudgets()

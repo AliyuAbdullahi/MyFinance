@@ -1,6 +1,7 @@
 package latproject.com.myfinance.views.homescreen.viewmodels
 
 import android.content.Context
+import latproject.com.myfinance.core.model.Bank
 import latproject.com.myfinance.core.model.SmsMessage
 import latproject.com.myfinance.core.model.modelparser.TransactionParser
 import latproject.com.myfinance.core.room.Budget
@@ -16,6 +17,20 @@ class HomeActivityViewModel (context: Context): CoreViewModel(context) {
 
     fun getBudgetsBy(bankName: String): List<Budget>? {
         return dataStore.getBudgetsForABank(bankName)
+    }
+
+    fun currentBank(): Bank? {
+        var bank = Bank()
+        var user = dataStore.getUser()
+        if(user != null) {
+            bank.textColor = user.bankTextColor
+            bank.backgroundColor = user.bankBackGroundColor
+            bank.name = user.bank
+
+            return bank
+        }
+
+        return null
     }
 
     fun loadTransactionsUnderTheHood() {

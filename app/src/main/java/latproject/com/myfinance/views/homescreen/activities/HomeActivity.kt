@@ -2,10 +2,13 @@ package latproject.com.myfinance.views.homescreen.activities
 
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.view.View
+import com.roger.catloadinglibrary.CatLoadingView
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.globals.navigateTo
@@ -19,11 +22,13 @@ import latproject.com.myfinance.views.budgets.activities.BudgetsListActivity
 import latproject.com.myfinance.views.budgets.activities.CreateBudgetActivity
 import latproject.com.myfinance.views.homescreen.viewmodels.HomeActivityViewModel
 import latproject.com.myfinance.views.transactions.activities.TransactionsActivity
+import timber.log.Timber
 
 class HomeActivity : CoreActivity(), SmsListener {
     lateinit var binding: ActivityHomeBinding
     lateinit var viewModel: HomeActivityViewModel
     var permissionManager: PermissionManager? = null
+    val catLoadingView = CatLoadingView()
 
     override fun onMessageReceived(message: String) {
         //TODO process message notification here...
@@ -35,6 +40,7 @@ class HomeActivity : CoreActivity(), SmsListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         binding.handler = HomeActivityHandler()
         viewModel = HomeActivityViewModel(this)
+        initSms()
     }
 
     override fun onStart() {
@@ -58,9 +64,11 @@ class HomeActivity : CoreActivity(), SmsListener {
 
     override fun onResume() {
         super.onResume()
+        showProgress()
         Handler().postDelayed({
             cacheTransactions()
-        }, 2000)
+            hideProgress()
+        }, 1500)
     }
 
     private fun cacheTransactions() {
@@ -136,6 +144,7 @@ class HomeActivity : CoreActivity(), SmsListener {
         val all = ArrayList<RealmBankTransaction>()
 
         if (permissionManager!!.checkPermissionForSmsRead()) {
+            bindBank()
             for (loadTransaction in viewModel.loadTransactions(bankName!!)) {
                 if (loadTransaction != null) {
                     all.add(loadTransaction)
@@ -150,19 +159,16 @@ class HomeActivity : CoreActivity(), SmsListener {
         }
     }
 
+    private fun bindBank() {
+        var bank = viewModel.currentBank()
+        if(bank != null) {
+            binding.currentBank.text = bank.name
+            binding.currentBank.setTextColor(Color.parseColor(bank.textColor))
+        }
+    }
+
     private fun initSms() {
         SmsReceiver.bindListener(this)
-        val bankName = viewModel.getBankName()
-        if (bankName != null) {
-            makeToast("Saved ${bankName}")
-            viewModel.loadTransactions(bankName).forEachIndexed { index, value ->
-                if (index < 4)
-                    makeToast("Saved ${value}")
-
-            }
-        } else {
-            makeToast("Bank name is null")
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -194,6 +200,26 @@ class HomeActivity : CoreActivity(), SmsListener {
 
         fun onBudgetsClicked(view: View) {
             navigateToBudgets()
+        }
+
+        fun openSettingsClicked(view: View) {
+
+        }
+    }
+
+    private fun showProgress() {
+        binding.whiteBackground.visibility = View.VISIBLE
+        catLoadingView.show(supportFragmentManager, "")
+    }
+
+    private fun hideProgress() {
+        binding.whiteBackground.visibility = View.GONE
+        try {
+            catLoadingView.dismissAllowingStateLoss()
+        }catch (error: IllegalStateException) {
+            Timber.e(error)
+        } catch (exception: Exception) {
+            Timber.e(exception)
         }
     }
 }

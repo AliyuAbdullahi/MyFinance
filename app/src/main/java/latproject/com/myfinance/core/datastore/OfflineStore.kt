@@ -78,4 +78,12 @@ class OfflineStore(context: Context) {
     fun save(list: List<RealmBankTransaction>) {
         realmManager.saveOrUpdate(list)
     }
+
+    fun getLocalRealm(): Realm {
+        return realmManager.getRealm()
+    }
+
+    fun save(budget: Budget) {
+        realmManager.saveOrUpdate(budget)
+    }
 }

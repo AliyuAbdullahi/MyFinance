@@ -89,6 +89,11 @@ dependencies {
 
     implementation 'uk.co.chrisjenx:calligraphy:2.2.0'
 
+    //IOS switch
+    implementation 'com.kyleduo.switchbutton:library:1.4.6'
+
+    implementation 'com.roger.catloadinglibrary:catloadinglibrary:1.0.4'
+
 
     // RxLifecycle
     implementation 'com.trello:rxlifecycle-kotlin:0.6.1'
