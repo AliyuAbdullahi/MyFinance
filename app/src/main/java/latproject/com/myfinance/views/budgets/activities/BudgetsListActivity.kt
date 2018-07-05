@@ -2,10 +2,14 @@ package latproject.com.myfinance.views.budgets.activities
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import latproject.com.myfinance.R
+import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.globals.navigateTo
 import latproject.com.myfinance.core.room.Budget
 import latproject.com.myfinance.core.view.CoreActivity
@@ -15,19 +19,45 @@ import latproject.com.myfinance.views.budgets.viewmodels.BudgetListViewModel
 
 class BudgetsListActivity : CoreActivity(), BudgetListAdapter.OnBudgetActivatedListener {
 
-    override fun onBudgetActivated(budget: Budget) {
-        viewModel.saveBudget(budget)
-        adapter.removeBudget(budget)
-        activeBudget = budget
-        notifyBudgetActivated()
-    }
+    override fun onBudgetActivated(budget: Budget, activated: Boolean, position: Int) {
 
-    private fun notifyBudgetActivated() {
-        if (activeBudget != null) {
+        if (budget.active) {
+            AlertDialog.Builder(this).setTitle("Delete Budget")
+                    .setMessage("Are you sure you want to delete this budget?")
+                    .setPositiveButton("Yes", { a, b ->
+                        adapter.removeBudget(budget)
+                        viewModel.deleteBudget(budget)
+                    })
+                    .setNegativeButton("No", null)
+                    .create().show()
+            adapter.setChecked(0)
+        } else {
+            val activeBudget = adapter.getItem(0)
+            if(activeBudget.active) {
+                viewModel.getRealm().executeTransaction({
+                    activeBudget.active = false
+                    budget.active = true
+                })
 
+                viewModel.saveBudget(activeBudget)
+                viewModel.saveBudget(budget)
+
+                adapter.removeBudget(activeBudget)
+                adapter.removeBudget(budget)
+                adapter.addBudget(activeBudget)
+                adapter.addBudgetAt(budget, 0)
+            }else {
+                viewModel.getRealm().executeTransaction({
+                    budget.active = true
+                })
+
+                viewModel.saveBudget(budget)
+
+                adapter.setChecked(0)
+            }
         }
     }
-
+    
     var activeBudget: Budget? = null
 
     lateinit var binding: ActivityBudgetsBinding
@@ -79,7 +109,7 @@ class BudgetsListActivity : CoreActivity(), BudgetListAdapter.OnBudgetActivatedL
 
         adapter.addBudgets(listOf)
 
-        checkEmptyState(list)
+        checkEmptyState(listOf)
     }
 
     private fun bindStatusBar() {
@@ -95,7 +125,7 @@ class BudgetsListActivity : CoreActivity(), BudgetListAdapter.OnBudgetActivatedL
             //showEmptyState
             binding.inActiveBudgetsEmptyState.visibility = View.VISIBLE
         } else {
-           binding.inActiveBudgetsEmptyState.visibility = View.GONE
+            binding.inActiveBudgetsEmptyState.visibility = View.GONE
         }
     }
 

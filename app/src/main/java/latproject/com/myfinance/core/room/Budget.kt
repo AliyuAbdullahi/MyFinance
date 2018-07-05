@@ -22,7 +22,7 @@ open class Budget : RealmObject() {
     }
 
     fun getCurrentStatus():String {
-        return if (active) "Active" else if (dateFinished > System.currentTimeMillis()) "Not Active" else "Not active"
+        return if (active) "Active" else if (System.currentTimeMillis() >= dateFinished) "Expired" else "Not active"
     }
 
     override fun equals(other: Any?): Boolean {

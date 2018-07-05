@@ -28,26 +28,28 @@ class BudgetListAdapter : RecyclerView.Adapter<BudgetListAdapter.BudgetListViewH
         val budgetPosition = budgets.indexOf(budget)
         this.budgets.remove(budget)
         notifyItemRemoved(budgetPosition)
+        notifyItemRangeChanged(budgetPosition, budgets.size)
     }
 
     fun addBudget(budget: Budget) {
         budgets.add(budget)
-        notifyItemInserted(budgets.size)
+        notifyItemInserted(budgets.size - 1)
+    }
+
+    fun removeAt(position: Int) {
+        budgets.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, budgets.size)
     }
 
     fun addBudgetAt(budget: Budget, position: Int) {
         budgets.add(position, budget)
         notifyItemInserted(position)
-        notifyItemRangeChanged(0, 1)
     }
 
     fun addBudgets(budgets: List<Budget>) {
-        for (budget in budgets) {
-            if (this.budgets.contains(budget).not()) {
-                this.budgets.add(budget)
-                notifyItemInserted(budgets.size)
-            }
-        }
+        this.budgets.addAll(budgets)
+        notifyItemInserted(this.budgets.size - 1)
     }
 
     override fun getItemCount(): Int {
@@ -58,6 +60,19 @@ class BudgetListAdapter : RecyclerView.Adapter<BudgetListAdapter.BudgetListViewH
         holder.bindTo(budgets[position])
     }
 
+    fun removeBudgetAt(i: Int) {
+        budgets.removeAt(i)
+        notifyItemRemoved(i)
+    }
+
+    fun getItem(i: Int): Budget {
+        return budgets[0]
+    }
+
+    fun setChecked(position: Int) {
+        notifyItemChanged(position)
+    }
+
     inner class BudgetListViewHolder(view: View) : RecyclerView.ViewHolder(view), CompoundButton.OnCheckedChangeListener {
 
         lateinit var budgetListBinding: LayoutBudgetListBinding
@@ -65,10 +80,9 @@ class BudgetListAdapter : RecyclerView.Adapter<BudgetListAdapter.BudgetListViewH
         override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
             if (p1) {
                 if (onBudgetActivatedLister != null) {
-                    onBudgetActivatedLister!!.onBudgetActivated(budget)
+                    onBudgetActivatedLister!!.onBudgetActivated(budget, p1, adapterPosition)
                 }
             }
-            updateSwitchBackground(p1)
         }
 
         init {
@@ -97,14 +111,16 @@ class BudgetListAdapter : RecyclerView.Adapter<BudgetListAdapter.BudgetListViewH
 
         private fun updateSwitchBackground(isChecked: Boolean) {
             if (isChecked) {
+                budgetListBinding.activateText.text = budgetListBinding.root.context.getString(R.string.delete)
                 budgetListBinding.activateSwitch.backDrawable = ContextCompat.getDrawable(budgetListBinding.root.context, R.drawable.background_on)
             } else {
+                budgetListBinding.activateText.text = budgetListBinding.root.context.getString(R.string.activate)
                 budgetListBinding.activateSwitch.backDrawable = ContextCompat.getDrawable(budgetListBinding.root.context, R.drawable.background_off)
             }
         }
     }
 
     interface OnBudgetActivatedListener {
-        fun onBudgetActivated(budget: Budget)
+        fun onBudgetActivated(budget: Budget, activated: Boolean, position: Int)
     }
 }

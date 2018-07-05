@@ -24,4 +24,6 @@
     <string name="last_credit">Last Credit</string>
     <string name="main_balance">Main Balance</string>
     <string name="budget_on">Budget on</string>
+    <string name="delete">Delete</string>
+    <string name="activate">Activate</string>
 </resources>

@@ -20,8 +20,8 @@
     <dimen name="text_size16">16sp</dimen>
     <dimen name="text_size14">14sp</dimen>text_size16
     <dimen name="text_size18">18sp</dimen>
-    <dimen name="text_size20">20dp</dimen>
-    <dimen name="text_size22">22dp</dimen>
+    <dimen name="text_size20">20sp</dimen>
+    <dimen name="text_size22">22sp</dimen>
     <dimen name="text_size24">24sp</dimen>
     <dimen name="text_size30">30sp</dimen>
     <dimen name="text_size32">32sp</dimen>

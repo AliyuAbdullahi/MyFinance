@@ -20,11 +20,12 @@ import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivityHomeBinding
 import latproject.com.myfinance.views.budgets.activities.BudgetsListActivity
 import latproject.com.myfinance.views.budgets.activities.CreateBudgetActivity
+import latproject.com.myfinance.views.dialogfragments.NotificationAlertDialog
 import latproject.com.myfinance.views.homescreen.viewmodels.HomeActivityViewModel
 import latproject.com.myfinance.views.transactions.activities.TransactionsActivity
 import timber.log.Timber
 
-class HomeActivity : CoreActivity(), SmsListener {
+class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkayClickedListener {
     lateinit var binding: ActivityHomeBinding
     lateinit var viewModel: HomeActivityViewModel
     var permissionManager: PermissionManager? = null
@@ -48,22 +49,43 @@ class HomeActivity : CoreActivity(), SmsListener {
         setStatusBarColor(R.color.white75)
     }
 
+    private fun updateBudgetsUnderTheHood() {
+        val allBudgets = viewModel.getBudgets()
+        if(allBudgets != null && allBudgets.isNotEmpty()) {
+            allBudgets.forEach {
+                if(System.currentTimeMillis() >= it.dateFinished) {
+                    val budget = it
+                    viewModel.dataStore.getRealm().executeTransaction({
+                        budget.active = false
+                    })
+                }
+            }
+        }
+    }
+
     private fun fetchBudget() {
         val budgets = viewModel.getBudgets()
         if (budgets == null || budgets.isEmpty()) {
             setUpProgress(0.0, 0.0)
+            NotificationAlertDialog.show(supportFragmentManager, "You have not created any budget yet, do you want to create one?", "No Budget Available")
         } else {
             val bankName = viewModel.getBankName()
-            val activeBudget = budgets.last { it.active }
-            val allTrxs = viewModel
-                    .getTransactionsForBank(bankName!!)?.filter { it.date > activeBudget.dateSet && !it.isCredit }?.map { it.amount }?.sum()
+            val activeBudget = budgets.find { it.active }
+            if (activeBudget != null) {
+                val allTrxs = viewModel
+                        .getTransactionsForBank(bankName!!)?.filter { it.date > activeBudget.dateSet && it.date <= activeBudget.dateFinished && !it.isCredit }?.map { it.amount }?.sum()
 
-            setUpProgress(allTrxs ?: 0.0, activeBudget.amount)
+                setUpProgress(allTrxs ?: 0.0, activeBudget.amount)
+            } else {
+                NotificationAlertDialog.show(supportFragmentManager, "You do not have any active budget, do you want to activate one?", "No Active Budget")
+                setUpProgress(0.0, 0.0)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        updateBudgetsUnderTheHood()
         showProgress()
         Handler().postDelayed({
             cacheTransactions()
@@ -98,9 +120,9 @@ class HomeActivity : CoreActivity(), SmsListener {
 
         //cacheOffsetOnBudgetSoYouCanWorkWithItInNextBudget
 
-        binding.moneySpent.text = "$amountSpent"
+        binding.moneySpent.text = String.format("%.0f", amountSpent)
 
-        binding.baseAmount.text = "$amount"
+        binding.baseAmount.text = String.format("%.0f", amount)
 
         binding.budgetProgressBar.progressBarWidth = resources.getDimension(R.dimen.size_16dp)
         binding.budgetProgressBar.backgroundColor = ContextCompat.getColor(this, R.color.budget_default)
@@ -161,7 +183,7 @@ class HomeActivity : CoreActivity(), SmsListener {
 
     private fun bindBank() {
         var bank = viewModel.currentBank()
-        if(bank != null) {
+        if (bank != null) {
             binding.currentBank.text = bank.name
             binding.currentBank.setTextColor(Color.parseColor(bank.textColor))
         }
@@ -216,10 +238,14 @@ class HomeActivity : CoreActivity(), SmsListener {
         binding.whiteBackground.visibility = View.GONE
         try {
             catLoadingView.dismissAllowingStateLoss()
-        }catch (error: IllegalStateException) {
+        } catch (error: IllegalStateException) {
             Timber.e(error)
         } catch (exception: Exception) {
             Timber.e(exception)
         }
+    }
+
+    override fun onOkayClicked() {
+        navigateToBudgetCreationPage()
     }
 }
