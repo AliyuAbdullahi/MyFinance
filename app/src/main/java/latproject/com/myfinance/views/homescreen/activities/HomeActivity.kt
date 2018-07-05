@@ -1,16 +1,15 @@
 package latproject.com.myfinance.views.homescreen.activities
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.graphics.Color
-import android.graphics.ColorFilter
-import android.os.Bundle
-import android.os.Handler
+import android.os.*
 import android.support.v4.content.ContextCompat
 import android.view.View
 import com.roger.catloadinglibrary.CatLoadingView
 import latproject.com.myfinance.R
-import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.globals.navigateTo
 import latproject.com.myfinance.core.room.RealmBankTransaction
 import latproject.com.myfinance.core.services.PermissionManager
@@ -51,9 +50,9 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
 
     private fun updateBudgetsUnderTheHood() {
         val allBudgets = viewModel.getBudgets()
-        if(allBudgets != null && allBudgets.isNotEmpty()) {
+        if (allBudgets != null && allBudgets.isNotEmpty()) {
             allBudgets.forEach {
-                if(System.currentTimeMillis() >= it.dateFinished) {
+                if (System.currentTimeMillis() >= it.dateFinished) {
                     val budget = it
                     viewModel.dataStore.getRealm().executeTransaction({
                         budget.active = false
@@ -109,13 +108,29 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
         }
     }
 
+    private fun showAccountLimitDialog() {
+        vibrate()
+        AlertDialog.Builder(this).setTitle(getString(R.string.budget_exhausted))
+                .setMessage(getString(R.string.create_another_budget))
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(getString(R.string.yes), { a, b ->
+                    navigateToBudgetCreationPage()
+                    a.dismiss()
+                }).setNegativeButton(getString(R.string.no), null)
+                .create().show()
+    }
+
     private fun setUpProgress(amountSpent: Double, amount: Double) {
         var offset = 0.0
         var valueInPercent = amountSpent / amount * 100
 
-        if (valueInPercent > 100) {
+        if (valueInPercent >= 100) {
             offset = valueInPercent - 100
             valueInPercent = 100.0
+
+            Handler().postDelayed({
+                showAccountLimitDialog()
+            }, 5000)
         }
 
         //cacheOffsetOnBudgetSoYouCanWorkWithItInNextBudget
@@ -126,8 +141,6 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
 
         binding.budgetProgressBar.progressBarWidth = resources.getDimension(R.dimen.size_16dp)
         binding.budgetProgressBar.backgroundColor = ContextCompat.getColor(this, R.color.budget_default)
-        binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_fine)
-
         Handler().postDelayed({
             binding.budgetPercentUsed.visibility = View.VISIBLE
             if (amountSpent == 0.0) {
@@ -142,19 +155,15 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
         } else {
             if (valueInPercent >= 90) {
                 binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_bad)
-            }
-            if (valueInPercent >= 70) {
+            } else if (valueInPercent >= 70) {
                 binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_going_bad)
-            }
-
-            if (valueInPercent >= 50) {
+            } else if (valueInPercent >= 50) {
                 binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_weird)
-            }
-
-            if (valueInPercent >= 30) {
+            } else if (valueInPercent >= 30) {
                 binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_going_off)
-            }
-            if (valueInPercent < 30) {
+            } else if (valueInPercent < 30) {
+                binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_fine)
+            } else {
                 binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_fine)
             }
             binding.budgetProgressBar.setProgressWithAnimation(valueInPercent.toFloat(), 2500)
@@ -178,6 +187,17 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
             fetchBudget()
         } else {
             permissionManager!!.checkPermissionForSmsRead()
+        }
+    }
+
+    private fun vibrate() {
+        val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            //deprecated in API 26
+            v.vibrate(500)
         }
     }
 

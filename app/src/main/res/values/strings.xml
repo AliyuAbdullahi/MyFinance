@@ -26,4 +26,11 @@
     <string name="budget_on">Budget on</string>
     <string name="delete">Delete</string>
     <string name="activate">Activate</string>
+    <string name="create">Create</string>
+    <string name="how_many_days">How many days?</string>
+    <string name="budget_amount">Budget amount</string>
+    <string name="change">Change</string>
+    <string name="selected_bank">Selected Bank: </string>
+    <string name="budget_exhausted">Budget Exhausted!</string>
+    <string name="create_another_budget">You have exhausted your budget, do you want to create another?</string>
 </resources>

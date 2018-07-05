@@ -1,26 +1,25 @@
 package latproject.com.myfinance.views.budgets.activities
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import latproject.com.myfinance.R
+import latproject.com.myfinance.core.globals.Constants
 import latproject.com.myfinance.core.globals.clear
 import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.room.Budget
-import latproject.com.myfinance.core.room.RealmBankTransaction
-import latproject.com.myfinance.core.utils.WeekDay
 import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivityCreateBudgetBinding
 import latproject.com.myfinance.views.budgets.viewmodels.CreateBudgetViewModel
-import java.util.*
+import latproject.com.myfinance.views.selectbank.activities.SelectBankActivity
 
 class CreateBudgetActivity : CoreActivity() {
     private lateinit var viewModel: CreateBudgetViewModel
@@ -40,6 +39,16 @@ class CreateBudgetActivity : CoreActivity() {
         binding.budgetAmount.addTextChangedListener(AmountWatcher())
         binding.numberOfDays.addTextChangedListener(AmountWatcher())
         showBaseBalanceOption()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bindBank()
+    }
+
+    private fun bindBank() {
+        binding.bankName.text = viewModel.getBank()
+        makeToast("${viewModel.getBank()}")
     }
 
     private fun bindStatusBar() {
@@ -144,13 +153,23 @@ class CreateBudgetActivity : CoreActivity() {
                 }).create().show()
     }
 
+    private fun navigateToSelectBank() {
+        val intent = Intent(this, SelectBankActivity::class.java)
+        intent.putExtra(Constants.FROM_ANOTHER_ACTIVITY, true)
+        startActivity(intent)
+    }
+
     inner class CreateBudgetHandler {
-        fun createBudget(vie: View) {
+        fun createBudget(view: View) {
             checkForFields({ valid ->
                 if (valid) {
                     createBudget()
                 }
             })
+        }
+
+        fun navigateToSelectBank(view: View) {
+            navigateToSelectBank()
         }
     }
 

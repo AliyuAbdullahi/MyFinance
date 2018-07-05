@@ -10,7 +10,7 @@ class OfflineStore(context: Context) {
     val realmManager = RealmManager(Realm.getDefaultInstance())
 
     fun addUser(user: User) {
-        realmManager.save(user)
+        realmManager.saveOrUpdate(user)
     }
 
     fun updateUser(user: User) {

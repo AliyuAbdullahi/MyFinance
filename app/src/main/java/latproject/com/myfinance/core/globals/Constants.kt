@@ -8,4 +8,5 @@ object Constants {
     val EXTRA_DIALOG_TITLE = "latproject.com.myfinance.fawkes.EXTRA_DIALOG_TITLE"
     val EXTRA_DIALOG_MESSAGE = "latproject.com.myfinance.EXTRA_DIALOG_MESSAGE"
     val TAG_FRAGMENT_NOTIFICATION_DIALOG = "latproject.com.myfinance.TAG_FRAGMENT_NOTIFICATION_DIALOG"
+    val FROM_ANOTHER_ACTIVITY  = "latproject.com.myfinance.FROM_ANOTHER_ACTIVITY"
 }

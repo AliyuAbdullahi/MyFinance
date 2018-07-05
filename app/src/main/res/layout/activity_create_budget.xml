@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="Selected Bank:  " />
+                android:text="@string/selected_bank" />
 
             <TextView
                 android:id="@+id/bank_name"
@@ -78,17 +78,18 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/selected_bank_title"
-                android:text="Stanbic IBTC"
+                android:text=""
                 android:textColor="@color/colorGrey800" />
 
             <Button
+                android:onClick="@{handler::navigateToSelectBank}"
                 android:id="@+id/change_bank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
                 android:background="?attr/selectableItemBackground"
-                android:text="Change"
+                android:text="@string/change"
                 android:textColor="@color/colorTabActive" />
         </RelativeLayout>
 
@@ -101,7 +102,7 @@
             android:layout_marginTop="@dimen/size_32dp"
             android:background="@drawable/curved_edge_border"
             android:gravity="center_horizontal"
-            android:hint="Budget amount"
+            android:hint="@string/budget_amount"
             android:inputType="numberDecimal"
             android:padding="@dimen/size_20dp"
             android:textSize="@dimen/text_size24" />
@@ -115,7 +116,7 @@
             android:layout_marginTop="@dimen/size_20dp"
             android:background="@drawable/curved_edge_border"
             android:gravity="center_horizontal"
-            android:hint="How many days?"
+            android:hint="@string/how_many_days"
             android:inputType="number"
             android:padding="@dimen/size_20dp" />
 
@@ -129,7 +130,7 @@
             android:background="@drawable/create_button_not_active"
             android:paddingLeft="@dimen/size_32dp"
             android:paddingRight="@dimen/size_32dp"
-            android:text="Create"
+            android:text="@string/create"
             android:textColor="@color/white" />
     </LinearLayout>
 </layout>
