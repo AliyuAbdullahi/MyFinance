@@ -17,7 +17,6 @@ class SmsReader(val context: Context) {
 
         if (cursor.moveToFirst()) {
             do {
-
                 val address = cursor.getString(cursor
                         .getColumnIndexOrThrow("address"))
                 val body = cursor.getString(cursor.getColumnIndexOrThrow("body"))
@@ -25,11 +24,13 @@ class SmsReader(val context: Context) {
 
                 val smsMessage = SmsMessage()
 
-                smsMessage.from = address
-                smsMessage.body = body
-                smsMessage.date = date.toLong()
+                if(body.toLowerCase().contains("credit") || body.toLowerCase().contains("debit")) {
+                    smsMessage.from = address
+                    smsMessage.body = body
+                    smsMessage.date = date.toLong()
+                    smsList.add(smsMessage)
+                }
 
-                smsList.add(smsMessage)
             } while (cursor.moveToNext())
         }
 
