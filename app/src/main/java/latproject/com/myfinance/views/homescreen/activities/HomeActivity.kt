@@ -7,10 +7,12 @@ import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.*
 import android.support.v4.content.ContextCompat
+import android.telephony.SmsMessage
 import android.view.View
 import com.roger.catloadinglibrary.CatLoadingView
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.navigateTo
+import latproject.com.myfinance.core.model.modelparser.TransactionParser
 import latproject.com.myfinance.core.room.RealmBankTransaction
 import latproject.com.myfinance.core.services.PermissionManager
 import latproject.com.myfinance.core.services.sms.SmsListener
@@ -30,7 +32,22 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
     var permissionManager: PermissionManager? = null
     val catLoadingView = CatLoadingView()
 
-    override fun onMessageReceived(message: String) {
+    override fun onMessageReceived(message: SmsMessage) {
+        var bankName = requireNotNull(viewModel.getBankName())
+        if(message.displayOriginatingAddress.toLowerCase().contains(bankName.toLowerCase().substring(0,bankName.length/2) )) {
+
+            val sms = latproject.com.myfinance.core.model.SmsMessage()
+            sms.body = message.displayMessageBody
+            sms.from = message.displayOriginatingAddress
+            sms.date = message.timestampMillis
+
+            val bankTransaction = TransactionParser.parseToTransaction(bankName, sms)
+
+            if(bankTransaction != null) {
+                viewModel.saveRealmTransaction(bankTransaction)
+            }
+        }
+
         //TODO process message notification here...
 //        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }

@@ -26,7 +26,7 @@ public class SmsReceiver extends BroadcastReceiver {
             String messageBody = smsMessage.getMessageBody();
             if(messageBody != null) {
                 if(mListener != null) {
-                    mListener.onMessageReceived(messageBody);
+                    mListener.onMessageReceived(smsMessage);
                 }
             }
             //Pass the message text to interface
