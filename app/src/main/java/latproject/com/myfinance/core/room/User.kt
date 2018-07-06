@@ -1,24 +1,20 @@
 package latproject.com.myfinance.core.room
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
-
-@Entity(tableName = "User")
-class User {
+open class User: RealmObject() {
     @PrimaryKey
     var id: String = ""
-    var email: String = ""
-    var name: String = ""
-    var bank: String = ""
-
-    override fun toString(): String {
-        return "User(id='$id', name='$name', bank='$bank')"
-    }
+    var email: String? = null
+    var name: String? = null
+    var bank: String? = null
+    var bankTextColor: String? = null
+    var bankBackGroundColor: String? = null
 
     override fun equals(other: Any?): Boolean {
         val targetUser = other as User
 
-        if (this.email.isEmpty() && targetUser.email.isNotEmpty() || this.name.isEmpty() && other.name.isNotEmpty()) {
+        if (this.email.isNullOrEmpty() && targetUser.email.isNullOrEmpty().not() || this.name.isNullOrEmpty() && other.name.isNullOrEmpty().not()) {
             return false
         }
 
@@ -26,10 +22,10 @@ class User {
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + email.hashCode()
-        result = 31 * result + name.hashCode()
-        result = 31 * result + bank.hashCode()
-        return result
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id='$id', email='$email', name='$name', bank='$bank', bankTextColor='$bankTextColor', bankBackGroundColor='$bankBackGroundColor')"
     }
 }

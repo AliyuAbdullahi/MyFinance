@@ -9,6 +9,7 @@
     <dimen name="size_18dp">18dp</dimen>
     <dimen name="size_20dp">20dp</dimen>
     <dimen name="size_24dp">24dp</dimen>
+    <dimen name="size_28dp">28dp</dimen>
     <dimen name="size_32dp">32dp</dimen>
     <dimen name="size_40dp">40dp</dimen>
     <dimen name="size_48dp">48dp</dimen>
@@ -17,10 +18,10 @@
     <dimen name="text_size8">8sp</dimen>
     <dimen name="text_size12">12sp</dimen>
     <dimen name="text_size16">16sp</dimen>
-    <dimen name="text_size14">14sp</dimen>
+    <dimen name="text_size14">14sp</dimen>text_size16
     <dimen name="text_size18">18sp</dimen>
-    <dimen name="text_size20">20dp</dimen>
-    <dimen name="text_size22">22dp</dimen>
+    <dimen name="text_size20">20sp</dimen>
+    <dimen name="text_size22">22sp</dimen>
     <dimen name="text_size24">24sp</dimen>
     <dimen name="text_size30">30sp</dimen>
     <dimen name="text_size32">32sp</dimen>

@@ -27,6 +27,8 @@
 
 
     <color name="budget_fine">#4FC3F7</color>
+    <color name="budget_going_off">#B3E5FC</color>
+    <color name="white75">#C0FFFFFF</color>
     <color name="color_bank_credit">#43A047</color>
     <color name="budget_default">#BDBDBD</color>
     <color name="budget_weird">#FDD835</color>

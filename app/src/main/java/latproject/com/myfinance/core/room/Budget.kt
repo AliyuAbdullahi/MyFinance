@@ -1,10 +1,9 @@
 package latproject.com.myfinance.core.room
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-@Entity
-class Budget {
+open class Budget : RealmObject() {
     @PrimaryKey
     var id: String = ""
     var amount: Double = 0.0
@@ -15,9 +14,24 @@ class Budget {
     var dateFinished: Long = 0L
     var durationInDays: Int = 0
     var active: Boolean = false
+    var status: String = ""
     var fulfilled: Boolean = false
 
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    fun getCurrentStatus():String {
+        return if (active) "Active" else if (System.currentTimeMillis() >= dateFinished) "Expired" else "Not active"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        val current = other as Budget
+
+        return current.id == this.id
+    }
+
     override fun toString(): String {
-        return "Budget(id=$id, amount=$amount, durationInDays=$durationInDays, fulfilled=$fulfilled)"
+        return "Budget(id='$id', amount=$amount, bank='$bank', amountSpent=$amountSpent, baseAmount=$baseAmount, dateSet=$dateSet, dateFinished=$dateFinished, durationInDays=$durationInDays, active=$active, status='$status', fulfilled=$fulfilled)"
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="handler"
+            type="latproject.com.myfinance.views.dialogfragments.NotificationAlertDialog.NotificationAlertHandler"/>
+    </data>
+    <android.support.percent.PercentFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.percent.PercentRelativeLayout
+            android:background="@drawable/curved_border_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_28dp"
+            android:padding="@dimen/size_32dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_16dp"
+                android:text="You have a notification "
+                android:textColor="@color/colorGrey800"
+                android:textSize="@dimen/text_size20" />
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="@dimen/size_8dp"
+                android:text="You have a notification "
+                android:textColor="@color/colorGrey700"
+                android:textSize="@dimen/text_size16" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/message"
+                android:layout_marginTop="@dimen/size_20dp">
+
+                <Button
+                    android:onClick="@{handler::onCancelClicked}"
+                    android:textColor="@color/budget_bad"
+                    android:background="?attr/selectableItemBackground"
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel" />
+
+                <Button
+                    android:onClick="@{handler::onOkayClicked}"
+                    android:textColor="@color/colorAccent"
+                    android:background="?attr/selectableItemBackground"
+                    android:id="@+id/ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_8dp"
+                    android:text="Yes" />
+            </LinearLayout>
+        </android.support.percent.PercentRelativeLayout>
+
+        <ImageView
+            android:id="@+id/notification_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/notification_mail" />
+
+    </android.support.percent.PercentFrameLayout>
+</layout>

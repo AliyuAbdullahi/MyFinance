@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import latproject.com.myfinance.BR
 import latproject.com.myfinance.core.model.Bank
 import latproject.com.myfinance.core.model.BankList
+import latproject.com.myfinance.core.room.User
 import latproject.com.myfinance.core.utils.JsonProcessorFromAsset
 import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.core.view.CoreViewModel
@@ -23,12 +24,14 @@ class SelectBankVIewModel(context: Context) : CoreViewModel(context) {
         }
     }
 
+    fun getUser(): User? {
+        return dataStore.getUser()
+    }
+
     @Bindable
     var dialogShowing: Boolean = false
         set(value) {
             field = value
             notifyPropertyChanged(BR.dialogShowing)
         }
-
-
 }
