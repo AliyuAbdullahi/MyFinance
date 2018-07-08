@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="handler"
+            type="latproject.com.myfinance.views.selectbank.activities.SelectBankActivity.SelectBankHandler"/>
+        <variable
+            name="viewModel"
+            type="latproject.com.myfinance.views.selectbank.viewmodels.SelectBankVIewModel"/>
+    </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,13 +36,6 @@
                 android:layout_marginTop="8dp" />
         </android.support.v7.widget.Toolbar>
 
-        <View
-            android:id="@+id/gradient"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_below="@id/toolbar"
-            android:background="@drawable/gradient_down" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/bank_list"
             android:layout_width="match_parent"
@@ -45,5 +45,18 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <include
+            android:id="@+id/confirm_dialog_link"
+            layout="@layout/layout_confirm_dialog"
+            android:layout_width="match_parent"
+            bind:handler="@{handler}"
+            bind:viewModel="@{viewModel}"
+            android:layout_height="match_parent"/>
+        <View
+            android:id="@+id/gradient"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_below="@id/toolbar"
+            android:background="@drawable/gradient_down" />
     </RelativeLayout>
 </layout>

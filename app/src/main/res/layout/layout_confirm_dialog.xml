@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="handler"
+            type="latproject.com.myfinance.views.selectbank.activities.SelectBankActivity.SelectBankHandler" />
+
+        <variable
+            name="viewModel"
+            type="latproject.com.myfinance.views.selectbank.viewmodels.SelectBankVIewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorTranslucentDark"
+        android:visibility="@{viewModel.dialogShowing ? View.VISIBLE: View.GONE}">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/size_32dp"
+            android:layout_marginLeft="@dimen/size_32dp"
+            android:layout_marginRight="@dimen/size_32dp"
+            android:background="@drawable/layout_confirm_dialog"
+            android:padding="@dimen/size_16dp">
+
+            <TextView
+                android:textSize="@dimen/text_size18"
+                android:id="@+id/dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGrey900" />
+
+            <TextView
+                android:id="@+id/dialog_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dialog_title"
+                android:layout_marginTop="@dimen/size_8dp"
+                android:textColor="@color/colorGrey700" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/dialog_message"
+                android:layout_marginTop="@dimen/size_8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:inputType="text"
+                    android:onClick="@{handler::onDialogCancelClicked}"
+                    android:text="@string/no"
+                    android:textColor="@color/negative_red" />
+
+                <Button
+                    android:id="@+id/yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:inputType="text"
+                    android:onClick="@{handler::onDialogOkayClicked}"
+                    android:text="@string/yes"
+                    android:textColor="@color/colorTabActive" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
