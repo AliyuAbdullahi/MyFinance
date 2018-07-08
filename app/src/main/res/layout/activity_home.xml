@@ -4,9 +4,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="handler"
             type="latproject.com.myfinance.views.homescreen.activities.HomeActivity.HomeActivityHandler" />
+
+        <variable
+            name="viewModel"
+            type="latproject.com.myfinance.views.homescreen.viewmodels.HomeActivityViewModel" />
     </data>
 
 
@@ -20,24 +26,38 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:visibility="gone"
-                android:onClick="@{handler::showPopUp}"
-                android:layout_centerVertical="true"
-                android:layout_margin="@dimen/size_16dp"
                 android:id="@+id/current_bank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size24" />
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/size_16dp"
+                android:background="?attr/selectableItemBackground"
+                android:elevation="@dimen/size_8dp"
+                android:onClick="@{handler::showPopUp}"
+                android:textSize="@dimen/text_size24"
+                android:visibility="gone" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/loading"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/current_bank"
+                style="@style/SpinKitView.Large.Circle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/size_16dp"
+                app:SpinKit_Color="@color/colorAccent" />
+
 
             <ImageView
-                android:onClick="@{handler.openSettingsClicked}"
                 android:id="@+id/open_settings_clicked"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/size_16dp"
-                android:src="@drawable/settings_image_selector"
-                />
+                android:onClick="@{handler.openSettingsClicked}"
+                android:src="@drawable/settings_image_selector" />
 
         </RelativeLayout>
 

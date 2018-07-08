@@ -12,6 +12,7 @@ import android.telephony.SmsMessage
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.github.ybq.android.spinkit.style.DoubleBounce
 import com.roger.catloadinglibrary.CatLoadingView
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.makeToast
@@ -42,7 +43,7 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
 
     override fun onMessageReceived(message: SmsMessage) {
         var bankName = requireNotNull(viewModel.getBankName())
-        if(message.displayOriginatingAddress.toLowerCase().contains(bankName.toLowerCase().substring(0,bankName.length/2) )) {
+        if (message.displayOriginatingAddress.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length / 2))) {
 
             val sms = latproject.com.myfinance.core.model.SmsMessage()
             sms.body = message.displayMessageBody
@@ -51,7 +52,7 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
 
             val bankTransaction = TransactionParser.parseToTransaction(bankName, sms)
 
-            if(bankTransaction != null) {
+            if (bankTransaction != null) {
                 viewModel.saveRealmTransaction(bankTransaction)
             }
         }
@@ -65,7 +66,9 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         binding.handler = HomeActivityHandler()
         viewModel = HomeActivityViewModel(this)
+        binding.viewModel = viewModel
         initSms()
+        showProgress()
     }
 
     override fun onStart() {
@@ -108,9 +111,13 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        when(item?.itemId) {
-            R.id.money_spent -> {navigateTo<MoneySpendingStatActivity>();return true}
-            R.id.budget_activities -> {makeToast("Opening budget activities");return true}
+        when (item?.itemId) {
+            R.id.money_spent -> {
+                navigateTo<MoneySpendingStatActivity>();return true
+            }
+            R.id.budget_activities -> {
+                makeToast("Will be available soon.");return true
+            }
         }
 
         return false
@@ -119,11 +126,20 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
     override fun onResume() {
         super.onResume()
         updateBudgetsUnderTheHood()
-        showProgress()
+        showLoading()
         Handler().postDelayed({
             cacheTransactions()
             hideProgress()
+            hideLoading()
         }, 1500)
+    }
+
+    private fun showLoading() {
+        binding.loading.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.loading.visibility = View.GONE
     }
 
     private fun cacheTransactions() {
