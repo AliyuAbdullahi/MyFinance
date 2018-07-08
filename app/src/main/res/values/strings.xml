@@ -39,9 +39,13 @@
     <string name="no_budget_available">No Budget Available</string>
     <string name="no_active_budget">No Active Budget</string>
     <string name="title_activity_money_spending_stat">MoneySpendingStatActivity</string>
-    <string name="budget_activities">Budget Activities</string>
-    <string name="money_spent_destination">Money spent destination</string>
+    <string name="budget_activities">Budgets Summary</string>
+    <string name="expenditure">Expenditures</string>
     <string name="since">Since </string>
     <string name="day_s">day(s)</string>
     <string name="transactions_summary_expenditure">Transactions Summary(Expenditure)</string>
+    <string name="create_budget">Create Budget</string>
+    <string name="spent">Spent:</string>
+    <string name="budget_created">Budget created</string>
+    <string name="error_in_budget_creation">An error occurred while creating budget</string>
 </resources>

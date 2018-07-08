@@ -53,7 +53,6 @@ class CreateBudgetActivity : CoreActivity() {
 
     private fun bindBank() {
         binding.bankName.text = viewModel.getBank()
-        makeToast("${viewModel.getBank()}")
     }
 
     private fun bindStatusBar() {
@@ -89,8 +88,12 @@ class CreateBudgetActivity : CoreActivity() {
         budget.baseAmount = viewModel.base
 
         viewModel.createBudget(budget, { createdBudget ->
-            makeToast("Budget created")
-            this.finish()
+            if(createdBudget != null) {
+                makeToast(getString(R.string.budget_created))
+                this.finish()
+            }else{
+                makeToast(getString(R.string.error_in_budget_creation))
+            }
         })
     }
 

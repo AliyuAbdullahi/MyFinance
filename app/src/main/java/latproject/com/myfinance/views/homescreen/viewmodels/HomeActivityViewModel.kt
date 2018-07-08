@@ -1,6 +1,8 @@
 package latproject.com.myfinance.views.homescreen.viewmodels
 
 import android.content.Context
+import android.databinding.Bindable
+import latproject.com.myfinance.BR
 import latproject.com.myfinance.core.model.Bank
 import latproject.com.myfinance.core.model.SmsMessage
 import latproject.com.myfinance.core.model.modelparser.TransactionParser
@@ -10,6 +12,13 @@ import latproject.com.myfinance.core.services.sms.SmsReader
 import latproject.com.myfinance.core.view.CoreViewModel
 
 class HomeActivityViewModel (context: Context): CoreViewModel(context) {
+
+    @Bindable
+    var loading: Boolean = false
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.loading)
+    }
 
     fun getBudgets(): List<Budget>? {
        return dataStore.getBudgets()
