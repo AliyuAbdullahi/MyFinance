@@ -34,7 +34,7 @@
 
         <activity
             android:name=".views.selectbank.activities.SelectBankActivity"
-            android:label="@string/title_activity_select_bank"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -45,27 +45,31 @@
         </activity>
         <activity
             android:name=".views.budgets.activities.BudgetsListActivity"
-            android:label="@string/title_activity_budgets"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.transactiondetails.activities.TransactionDetailsActivity"
-            android:label="@string/title_activity_transaction_details"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.budgets.activities.CreateBudgetActivity"
-            android:label="@string/title_activity_create_budget"
+            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.settings.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.money_spend_overview.activities.MoneySpendingStatActivity"
-            android:label="@string/title_activity_money_spending_stat"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

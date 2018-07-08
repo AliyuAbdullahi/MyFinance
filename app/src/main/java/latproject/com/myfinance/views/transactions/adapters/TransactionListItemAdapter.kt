@@ -19,7 +19,6 @@ class TransactionListItemAdapter : RecyclerView.Adapter<TransactionListItemAdapt
 
     lateinit var onTransactionClickedListener: OnTransactionClickedListener
 
-
     fun setTransactions(bankTransaction: MutableList<RealmBankTransaction?>) {
         this.bankTransactions.addAll(bankTransaction)
         notifyDataSetChanged()
