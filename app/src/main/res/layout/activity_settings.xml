@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="handler"
+            type="latproject.com.myfinance.views.settings.activities.SettingsActivity.SettingsHandler"/>
+    </data>
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <TextView
+                android:id="@+id/settings_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:textColor="@color/colorGrey800"
+                android:textSize="@dimen/text_size16" />
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar">
+
+            <RelativeLayout
+                android:id="@+id/change_bank_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_heightPercent="10%">
+
+                <ImageView
+                    android:id="@+id/change_bank_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/size_16dp"
+                    android:src="@drawable/change_bank"
+                    android:tint="@color/colorGrey700" />
+
+                <TextView
+                    android:id="@+id/chnage_bank_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/size_8dp"
+                    android:layout_toRightOf="@id/change_bank_icon"
+                    android:text="Change Bank" />
+
+                <ImageView
+                    android:onClick="@{handler::onChangeBankClicked}"
+                    android:id="@+id/change_bank_clicked"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground" />
+                <View
+                    android:layout_marginLeft="@dimen/size_36dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/colorGrey300"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"/>
+            </RelativeLayout>
+        </android.support.percent.PercentRelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_8dp"
+            android:layout_below="@id/toolbar"
+            android:background="@drawable/gradient_down" />
+    </android.support.percent.PercentRelativeLayout>
+</layout>

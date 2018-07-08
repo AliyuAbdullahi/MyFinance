@@ -7,10 +7,14 @@ import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.*
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.PopupMenu
 import android.telephony.SmsMessage
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.roger.catloadinglibrary.CatLoadingView
 import latproject.com.myfinance.R
+import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.globals.navigateTo
 import latproject.com.myfinance.core.model.modelparser.TransactionParser
 import latproject.com.myfinance.core.room.RealmBankTransaction
@@ -23,10 +27,14 @@ import latproject.com.myfinance.views.budgets.activities.BudgetsListActivity
 import latproject.com.myfinance.views.budgets.activities.CreateBudgetActivity
 import latproject.com.myfinance.views.dialogfragments.NotificationAlertDialog
 import latproject.com.myfinance.views.homescreen.viewmodels.HomeActivityViewModel
+import latproject.com.myfinance.views.money_spend_overview.activities.MoneySpendingStatActivity
+import latproject.com.myfinance.views.settings.activities.SettingsActivity
 import latproject.com.myfinance.views.transactions.activities.TransactionsActivity
 import timber.log.Timber
 
-class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkayClickedListener {
+
+class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkayClickedListener, PopupMenu.OnMenuItemClickListener {
+
     lateinit var binding: ActivityHomeBinding
     lateinit var viewModel: HomeActivityViewModel
     var permissionManager: PermissionManager? = null
@@ -62,7 +70,7 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
 
     override fun onStart() {
         super.onStart()
-        setStatusBarColor(R.color.white75)
+        setStatusBarColor(R.color.white)
     }
 
     private fun updateBudgetsUnderTheHood() {
@@ -83,7 +91,7 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
         val budgets = viewModel.getBudgets()
         if (budgets == null || budgets.isEmpty()) {
             setUpProgress(0.0, 0.0)
-            NotificationAlertDialog.show(supportFragmentManager, "You have not created any budget yet, do you want to create one?", "No Budget Available")
+            NotificationAlertDialog.show(supportFragmentManager, getString(R.string.you_have_not_created_budget_yet), getString(R.string.no_budget_available))
         } else {
             val bankName = viewModel.getBankName()
             val activeBudget = budgets.find { it.active }
@@ -93,10 +101,19 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
 
                 setUpProgress(allTrxs ?: 0.0, activeBudget.amount)
             } else {
-                NotificationAlertDialog.show(supportFragmentManager, "You do not have any active budget, do you want to activate one?", "No Active Budget")
+                NotificationAlertDialog.show(supportFragmentManager, getString(R.string.you_dont_have_active_budget), getString(R.string.no_active_budget))
                 setUpProgress(0.0, 0.0)
             }
         }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.money_spent -> {navigateTo<MoneySpendingStatActivity>();return true}
+            R.id.budget_activities -> {makeToast("Opening budget activities");return true}
+        }
+
+        return false
     }
 
     override fun onResume() {
@@ -221,6 +238,7 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
     private fun bindBank() {
         var bank = viewModel.currentBank()
         if (bank != null) {
+            binding.currentBank.visibility = View.VISIBLE
             binding.currentBank.text = bank.name
             binding.currentBank.setTextColor(Color.parseColor(bank.textColor))
         }
@@ -248,6 +266,14 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
         navigateTo<BudgetsListActivity>()
     }
 
+    private fun displayPopUp(view: View) {
+        val popup = PopupMenu(this, view)
+        val inflater = popup.menuInflater
+        popup.setOnMenuItemClickListener(this)
+        inflater.inflate(R.menu.transactions_pop_up, popup.getMenu())
+        popup.show()
+    }
+
     inner class HomeActivityHandler {
         fun onCreateBudgetClicked(view: View) {
             navigateToBudgetCreationPage()
@@ -262,7 +288,11 @@ class HomeActivity : CoreActivity(), SmsListener, NotificationAlertDialog.OnOkay
         }
 
         fun openSettingsClicked(view: View) {
+            navigateTo<SettingsActivity>()
+        }
 
+        fun showPopUp(view: View) {
+            displayPopUp(view)
         }
     }
 

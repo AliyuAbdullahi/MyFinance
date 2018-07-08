@@ -15,6 +15,20 @@ open class RealmBankTransaction : RealmObject() {
     @PrimaryKey
     var id: String = ""
 
+    fun source() =
+            when {
+                details.toLowerCase().contains("web purchase") -> "WEB PURCHASE"
+                details.toLowerCase().contains("atm") -> "ATM CASH WITHDRAWAL"
+                details.toLowerCase().contains("pos ") -> "POS TRANSACTION"
+                details.toLowerCase().contains("sms") -> "SMS CHARGE"
+                details.toLowerCase().contains("maintenance") -> "ACCOUNT MAINTENANCE"
+                details.toLowerCase().contains("uber") -> "UBER TRIP"
+                details.toLowerCase().contains("taxify") -> "TAXIFY TRIP"
+                details.toLowerCase().contains("bill") -> "BILL PAYMENT"
+
+                else -> "TRANSFER TO FRIENDS/FAMILY"
+            }
+
     override fun equals(other: Any?): Boolean {
         val current = other as RealmBankTransaction
 
