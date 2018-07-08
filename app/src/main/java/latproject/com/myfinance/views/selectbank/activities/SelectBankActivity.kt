@@ -37,6 +37,11 @@ class SelectBankActivity : CoreActivity(), BankListAdapter.OnBankSelectedListene
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        setStatusBarColor(R.color.white)
+    }
+
     private fun fromAnotherContext(): Boolean {
         return intent.hasExtra(Constants.FROM_ANOTHER_ACTIVITY) && intent.getBooleanExtra(Constants.FROM_ANOTHER_ACTIVITY, false)
     }

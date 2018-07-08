@@ -46,6 +46,11 @@ class CreateBudgetActivity : CoreActivity() {
         bindBank()
     }
 
+    override fun onStart() {
+        super.onStart()
+        setStatusBarColor(R.color.white)
+    }
+
     private fun bindBank() {
         binding.bankName.text = viewModel.getBank()
         makeToast("${viewModel.getBank()}")
