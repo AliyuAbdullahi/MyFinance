@@ -44,4 +44,8 @@
     <string name="since">Since </string>
     <string name="day_s">day(s)</string>
     <string name="transactions_summary_expenditure">Transactions Summary(Expenditure)</string>
+    <string name="create_budget">Create Budget</string>
+    <string name="spent">Spent:</string>
+    <string name="budget_created">Budget created</string>
+    <string name="error_in_budget_creation">An error occurred while creating budget</string>
 </resources>

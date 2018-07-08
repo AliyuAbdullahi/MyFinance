@@ -11,8 +11,6 @@ import android.support.v7.widget.PopupMenu
 import android.telephony.SmsMessage
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import com.github.ybq.android.spinkit.style.DoubleBounce
 import com.roger.catloadinglibrary.CatLoadingView
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.makeToast

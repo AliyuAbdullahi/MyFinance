@@ -4,15 +4,15 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.view.MenuItem
 import android.widget.Toast
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.Constants
 import latproject.com.myfinance.core.room.RealmBankTransaction
+import latproject.com.myfinance.core.utils.FormattingUtility
 import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivityTransactionDetailsBinding
 import latproject.com.myfinance.views.transactiondetails.viewmodels.TransactionDetailsViewModel
+import java.util.*
 
 class TransactionDetailsActivity : CoreActivity() {
     lateinit var binding: ActivityTransactionDetailsBinding
@@ -65,17 +65,14 @@ class TransactionDetailsActivity : CoreActivity() {
         when (state) {
             State.EXPANDED -> {
                 if (appToggleState != State.EXPANDED)
-                    Toast.makeText(this, "Expanded", Toast.LENGTH_SHORT).show()
                 appToggleState = State.EXPANDED
             }
             State.IDLE -> {
                 if (appToggleState != State.IDLE)
-                    Toast.makeText(this, "IDLE", Toast.LENGTH_SHORT).show()
                 appToggleState = State.IDLE
             }
             State.COLLAPSED -> {
                 if (appToggleState != State.COLLAPSED)
-                    Toast.makeText(this, "COLLAPSED", Toast.LENGTH_SHORT).show()
                 appToggleState = State.COLLAPSED
             }
         }
@@ -95,10 +92,19 @@ class TransactionDetailsActivity : CoreActivity() {
     }
 
     private fun bind(bankTransaction: RealmBankTransaction) {
+        val imageResources = arrayListOf<Int>(R.drawable.transaction_1,
+                R.drawable.transaction_2,R.drawable.transaction_3,
+                R.drawable.transaction_4,R.drawable.transaction_5,
+                R.drawable.transaction_6)
+
+        val rand =  Random()
+        val randInt = rand.nextInt( 6 )
         binding.amount.text = resources.getString(R.string.amount, bankTransaction.amount)
-        binding.details.text = bankTransaction.details
+        binding.details.text = bankTransaction.details.replace("   ", " ").replace("  ", " ")
         binding.balanceAfterTransaction.text = resources.getString(R.string.amount, bankTransaction.balanceAfterTransaction)
         binding.collapsingToolbar.title = if (bankTransaction.isCredit) getString(R.string.credit) else getString(R.string.debit)
+        binding.date.text = FormattingUtility.getDateTime(bankTransaction.date)
+        binding.jobDetailsToolbarImage.setImageResource(imageResources[randInt])
     }
 
     enum class State {
