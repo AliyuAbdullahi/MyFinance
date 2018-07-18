@@ -20,7 +20,7 @@ open class CoreViewModel(val context: Context): BaseObservable() {
     }
 
     fun getTransactionsForBank(bankName: String): List<RealmBankTransaction>? {
-        return getTransactions()?.filter { it.bank.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length/2))}
+        return getTransactions()?.filter { it.bank.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length/2 + 1))}
     }
 
     fun getBankName(): String? {

@@ -2,6 +2,8 @@ package latproject.com.myfinance.core.datastore
 
 import android.content.Context
 import io.realm.Realm
+import io.realm.RealmObject
+import latproject.com.myfinance.core.model.OnboardingStatus
 import latproject.com.myfinance.core.room.*
 
 class DataStore(context: Context) {
@@ -97,6 +99,14 @@ class DataStore(context: Context) {
 
     fun getRealm(): Realm {
         return offlineStore.getLocalRealm()
+    }
+
+    fun save(onboardingStatus: RealmObject) {
+        offlineStore.saveObject(onboardingStatus)
+    }
+
+    fun getOnboarding(): List<OnboardingStatus>? {
+        return offlineStore.getAll(OnboardingStatus::class.java)
     }
 
 }

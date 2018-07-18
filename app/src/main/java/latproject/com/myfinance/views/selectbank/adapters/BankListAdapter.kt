@@ -21,6 +21,7 @@ class BankListAdapter : RecyclerView.Adapter<BankListAdapter.BankListViewHolder>
     }
 
     fun addBanks(bankList: List<RealmBank>) {
+        banks.clear()
         banks.addAll(bankList)
         notifyDataSetChanged()
     }

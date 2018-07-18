@@ -3,10 +3,12 @@ package latproject.com.myfinance.views.selectbank.activities
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.SearchView
 import android.view.View
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.Constants
 import latproject.com.myfinance.core.globals.navigateTo
+import latproject.com.myfinance.core.model.Bank
 import latproject.com.myfinance.core.model.RealmBank
 import latproject.com.myfinance.core.model.modelparser.ModelMapper
 import latproject.com.myfinance.core.room.User
@@ -42,21 +44,42 @@ class SelectBankActivity : CoreActivity(), BankListAdapter.OnBankSelectedListene
         setStatusBarColor(R.color.white)
     }
 
+    private var banks = mutableListOf<Bank>()
     private fun fromAnotherContext(): Boolean {
         return intent.hasExtra(Constants.FROM_ANOTHER_ACTIVITY) && intent.getBooleanExtra(Constants.FROM_ANOTHER_ACTIVITY, false)
     }
-
+    private lateinit var adapter: BankListAdapter
     private fun setUpRecyclerView() {
         val layoutManager = GridLayoutManager(this, 2)
         binding.bankList.layoutManager = layoutManager
 
-        val adapter = BankListAdapter()
+        adapter = BankListAdapter()
         adapter.setOnBankSelectedListener(this)
         binding.bankList.adapter = adapter
 
         viewModel.getAllBanks(this) {
+            banks.addAll(it)
             adapter.addBanks(ModelMapper.map(it))
+            processSearch()
         }
+    }
+
+    private fun processSearch() {
+        binding.search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if(newText != null && newText.isNullOrEmpty().not()) {
+                    val foundBanks = banks.filter { it.name!!.toLowerCase().contains(newText.toLowerCase()) }
+                    adapter.addBanks(ModelMapper.map(foundBanks))
+                } else {
+                    adapter.addBanks(ModelMapper.map(banks))
+                }
+                return false
+            }
+        })
     }
 
     private fun bankSelected(): Boolean {
@@ -126,14 +149,10 @@ class SelectBankActivity : CoreActivity(), BankListAdapter.OnBankSelectedListene
             viewModel.dataStore.saveUser(user!!, {
                 if (fromAnotherContext()) {
                     finish()
-                } else {
-                    openHome()
-                }
+                } else { openHome() }
             })
         }
 
-        fun onDialogCancelClicked(view: View) {
-            hideDialog()
-        }
+        fun onDialogCancelClicked(view: View) { hideDialog() }
     }
 }

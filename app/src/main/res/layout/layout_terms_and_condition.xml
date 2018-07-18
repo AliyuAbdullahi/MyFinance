@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:paddingBottom="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <TextView
+                android:textColor="@color/colorGrey800"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Terms and Conditions"
+                android:textSize="@dimen/text_size18" />
+        </android.support.v7.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_8dp"
+            android:layout_below="@id/toolbar"
+            android:background="@drawable/gradient_down" />
+
+        <LinearLayout
+            android:layout_marginBottom="36dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_marginLeft="@dimen/size_16dp"
+            android:layout_marginRight="@dimen/size_16dp"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:text="MyFinance application will use SMS alert from your bank to generate data that will be displayed to you in a much better and clearer form than
+what you see on your sms app. It will display the summary of your transactions and will allow you to create, edit and delete your budgets."
+                        android:layout_width="wrap_content"
+                        android:lineSpacingExtra="6dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_20dp" />
+
+                    <TextView
+                        android:text="MyFinance application WILL NOT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_20dp" />
+
+                    <TextView
+                        android:layout_marginRight="@dimen/size_8dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@android:drawable/btn_radio"
+                        android:text="Send your data to any server as all data will be on your device."
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_16dp" />
+
+                    <TextView
+                        android:layout_marginRight="@dimen/size_8dp"
+
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@android:drawable/btn_radio"
+                        android:text="Send/make your data visible to any computer or human."
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_16dp" />
+
+                    <TextView
+                        android:layout_marginRight="@dimen/size_8dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@android:drawable/btn_radio"
+                        android:text="Use your data for any personal benefit."
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_16dp" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+        <TextView
+            android:padding="@dimen/size_8dp"
+            android:layout_alignParentBottom="true"
+            android:textStyle="italic"
+            android:text="Click the '>' arrow at bottom right to agree with the terms."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_20dp" />
+    </RelativeLayout>
+</layout>

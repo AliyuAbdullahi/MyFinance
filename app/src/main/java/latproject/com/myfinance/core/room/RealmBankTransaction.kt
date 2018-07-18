@@ -25,6 +25,7 @@ open class RealmBankTransaction : RealmObject() {
                 details.toLowerCase().contains("uber") -> "UBER TRIP"
                 details.toLowerCase().contains("taxify") -> "TAXIFY TRIP"
                 details.toLowerCase().contains("bill") -> "BILL PAYMENT"
+                details.toLowerCase().contains("card maint") -> "ACCOUNT MAINTENANCE"
 
                 else -> "TRANSFER TO FRIENDS/FAMILY"
             }

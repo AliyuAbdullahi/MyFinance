@@ -9,4 +9,7 @@ object Constants {
     val EXTRA_DIALOG_MESSAGE = "latproject.com.myfinance.EXTRA_DIALOG_MESSAGE"
     val TAG_FRAGMENT_NOTIFICATION_DIALOG = "latproject.com.myfinance.TAG_FRAGMENT_NOTIFICATION_DIALOG"
     val FROM_ANOTHER_ACTIVITY  = "latproject.com.myfinance.FROM_ANOTHER_ACTIVITY"
+    val SMS_TRANSACTION_LIST_INTENT: String = "latproject.com.myfinance.SMS_TRANSACTION_LIST_INTENT"
+    val TRANSACTION_LIST: String = "latproject.com.myfinance.SMS_TRANSACTION_LIST_INTENT"
+    val SMS_SERVICE_NAME: String = "SmsService"
 }

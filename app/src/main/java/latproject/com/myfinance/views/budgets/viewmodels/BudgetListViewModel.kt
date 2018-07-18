@@ -8,7 +8,8 @@ import latproject.com.myfinance.core.view.CoreViewModel
 class BudgetListViewModel(context: Context): CoreViewModel(context) {
 
     fun getBudgets(): List<Budget>? {
-        return dataStore.getBudgets()
+        val bankName = dataStore.getBank()
+        return dataStore.getBudgets()?.filter { it.bank == bankName }
     }
 
     fun saveBudget(budget: Budget) {

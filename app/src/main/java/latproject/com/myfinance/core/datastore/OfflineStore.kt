@@ -2,7 +2,9 @@ package latproject.com.myfinance.core.datastore
 
 import android.content.Context
 import io.realm.Realm
+import io.realm.RealmObject
 import latproject.com.myfinance.core.datastore.realm.RealmManager
+import latproject.com.myfinance.core.model.OnboardingStatus
 import latproject.com.myfinance.core.model.modelparser.ModelMapper
 import latproject.com.myfinance.core.room.*
 
@@ -85,5 +87,13 @@ class OfflineStore(context: Context) {
 
     fun save(budget: Budget) {
         realmManager.saveOrUpdate(budget)
+    }
+
+    fun saveObject(onboardingStatus: RealmObject) {
+        realmManager.saveOrUpdate(onboardingStatus)
+    }
+
+    fun<T: RealmObject> getAll(java: Class<T>): List<T> {
+        return realmManager.findAllByClass(java)
     }
 }

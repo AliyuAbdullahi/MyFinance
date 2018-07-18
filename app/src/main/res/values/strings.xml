@@ -48,4 +48,5 @@
     <string name="spent">Spent:</string>
     <string name="budget_created">Budget created</string>
     <string name="error_in_budget_creation">An error occurred while creating budget</string>
+    <string name="title_activity_intro">IntroActivity</string>
 </resources>
