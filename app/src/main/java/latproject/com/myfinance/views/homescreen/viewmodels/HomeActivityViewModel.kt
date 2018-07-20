@@ -46,7 +46,7 @@ class HomeActivityViewModel(context: Context) : CoreViewModel(context) {
     fun loadTransactionsUnderTheHood(): List<SmsMessage> {
         val bankName = dataStore.getBank()
         if (bankName != null) {
-            return getMessages("uba")
+            return getMessages("union")
         }
         return listOf()
     }

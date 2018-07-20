@@ -153,35 +153,37 @@ class TransactionParser {
         }
 
         private fun parseForUnion(sms: SmsMessage): RealmBankTransaction {
-            val message = sms.body
             val bankTransaction = RealmBankTransaction()
 
-            val type = if (message.toLowerCase().contains("debit")) "debit" else if (message.toLowerCase().contains("credit")) "credit" else ""
+            if(sms.from.contains("UNIONBANK")) {
+                val message = sms.body
 
-            if (type != "") {
+                val type = if (message.toLowerCase().contains("debit")) "debit" else if (message.toLowerCase().contains("credit")) "credit" else ""
+
+                if (type != "") {
 //                val amount = ""
 
 
-                val startIndexForAmount = message.indexOf("Amt") + 8
+                    val startIndexForAmount = message.indexOf("Amt") + 8
 
-                val endIndexForAmount = message.indexOf("Date")
+                    val endIndexForAmount = message.indexOf("Date")
 
-                val amount = message.substring(startIndexForAmount, endIndexForAmount)
+                    val amount = message.substring(startIndexForAmount, endIndexForAmount)
 
-                val startIndexForDetails = message.toLowerCase().indexOf("Desc".toLowerCase()) + 6
-                val endIndexForDetails = message.toLowerCase().indexOf("Balance".toLowerCase())
+                    val startIndexForDetails = message.toLowerCase().indexOf("Desc".toLowerCase()) + 6
+                    val endIndexForDetails = message.toLowerCase().indexOf("Balance".toLowerCase())
 
-                var details = ""
-                if ((endIndexForDetails - startIndexForDetails) > 0)
-                    details = message.substring(startIndexForDetails, endIndexForDetails)
+                    var details = ""
+                    if ((endIndexForDetails - startIndexForDetails) > 0)
+                        details = message.substring(startIndexForDetails, endIndexForDetails)
 
-                val startIndexForBalanceAfterTrx = message.indexOf("Balance: ") + 9
-                val balanceAfterTrx = message.substring(startIndexForBalanceAfterTrx, startIndexForBalanceAfterTrx + 3).filter { it.toString() != "it" }
+                    val startIndexForBalanceAfterTrx = message.indexOf("Balance: ") + 9
+                    val balanceAfterTrx = message.substring(startIndexForBalanceAfterTrx, startIndexForBalanceAfterTrx + 3).filter { it.toString() != "it" }
 
-                bankTransaction.bank = sms.from
-                bankTransaction.date = sms.date
-                System.out.println("_BALNCE: ${balanceAfterTrx} _AMOUNT: ${amount}")
-                val transactionAfter = balanceAfterTrx.replace("it", "")
+                    bankTransaction.bank = sms.from
+                    bankTransaction.date = sms.date
+                    System.out.println("_BALNCE: ${balanceAfterTrx} _AMOUNT: ${amount}")
+                    val transactionAfter = balanceAfterTrx.replace("it", "")
 
                 if (transactionAfter != "") {
                     bankTransaction.balanceAfterTransaction = transactionAfter.toDouble()
@@ -189,10 +191,11 @@ class TransactionParser {
                     bankTransaction.balanceAfterTransaction = 0.0
                 }
 
-                bankTransaction.details = details
-                bankTransaction.type = type
-                bankTransaction.amount = 0.0
-//                bankTransaction.amount = amount.toDouble()
+                    bankTransaction.details = details
+                    bankTransaction.type = type
+                    bankTransaction.amount = 0.0
+                bankTransaction.amount = amount.toDouble()
+                }
             }
 
             return bankTransaction

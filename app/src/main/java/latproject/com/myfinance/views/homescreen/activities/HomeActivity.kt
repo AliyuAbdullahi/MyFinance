@@ -166,12 +166,13 @@ class HomeActivity : CoreActivity(), SmsListener,
         isResume = true
         getCurrentlySelectedBank()
         bindBank()
+
         if (viewModel.getBankName() != null) {
 
             viewModel.loadTransactionsUnderTheHood().forEachIndexed { index, smsMessage ->
-                //                if (index < 6) {
-////                val currentTransaction = TransactionParser.parseToTransaction("union", smsMessage)
-////                makeToast("${currentTransaction}")
+                                if (index < 6) {
+                val currentTransaction = TransactionParser.parseToTransaction("union", smsMessage)
+                makeToast("${currentTransaction}") }
             }
         }
 
