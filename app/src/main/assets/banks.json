@@ -6,12 +6,12 @@
       "logo": "stanbic",
       "text_color": "#0A549A"
     },
-//    {
-//      "name": "UnionBank",
-//      "background_color": "#10A6E0",
-//      "logo": "union",
-//      "text_color": "#10A6E0"
-//    },
+    {
+      "name": "UnionBank",
+      "background_color": "#10A6E0",
+      "logo": "union",
+      "text_color": "#10A6E0"
+    },
     {
       "name": "UBA",
       "background_color": "#CE3316",

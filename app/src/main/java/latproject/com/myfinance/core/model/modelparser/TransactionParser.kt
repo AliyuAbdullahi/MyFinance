@@ -123,7 +123,7 @@ class TransactionParser {
                     val details = message.substring(startIndexForDetails, endIndexForDetails)
 
                     val startIndexForBalanceAfterTrx = message.toLowerCase().indexOf("Bal".toLowerCase()) + 7
-                    var endIndexForBalance = if (message.toLowerCase().contains("http"))
+                    val endIndexForBalance = if (message.toLowerCase().contains("http"))
                         message.toLowerCase().indexOf("http") else if (message.toLowerCase().contains("Dial".toLowerCase())) message.indexOf("Dial".toLowerCase()) else -1
 
                     var balanceAfterTrx = ""
@@ -159,6 +159,8 @@ class TransactionParser {
             val type = if (message.toLowerCase().contains("debit")) "debit" else if (message.toLowerCase().contains("credit")) "credit" else ""
 
             if (type != "") {
+//                val amount = ""
+
 
                 val startIndexForAmount = message.indexOf("Amt") + 8
 

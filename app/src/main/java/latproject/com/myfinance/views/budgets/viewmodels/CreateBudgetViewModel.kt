@@ -33,7 +33,7 @@ class CreateBudgetViewModel(context: Context) : CoreViewModel(context) {
     fun getLastCredit(): Double {
         val currentBank = dataStore.getBank()
 
-        val lastCredit = dataStore.getTransactionsForBank(currentBank!!)?.filter { it.isCredit }?.map { it.amount }?.first()
+        val lastCredit = dataStore.getTransactionsForBank(currentBank!!)?.filter { it.isCredit }?.map { it.amount }?.firstOrNull()
 
         return lastCredit ?: 0.00
     }

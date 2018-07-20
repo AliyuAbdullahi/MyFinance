@@ -124,11 +124,17 @@ class HomeActivity : CoreActivity(), SmsListener,
         }
     }
 
+    var noBudgetDialogCount = 0
+    var noActiveBudget = 0
     private fun fetchBudget() {
         val budgets = viewModel.getBudgets()
         if (budgets == null || budgets.isEmpty()) {
             setUpProgress(0.0, 0.0)
-            NotificationAlertDialog.show(supportFragmentManager, getString(R.string.you_have_not_created_budget_yet), getString(R.string.no_budget_available))
+            if (isResume && noBudgetDialogCount < 3){
+                NotificationAlertDialog.show(supportFragmentManager, getString(R.string.you_have_not_created_budget_yet),
+                        getString(R.string.no_budget_available))
+                noBudgetDialogCount++
+            }
         } else {
             val bankName = viewModel.getBankName()
             val activeBudget = budgets.find { it.active }
@@ -138,7 +144,12 @@ class HomeActivity : CoreActivity(), SmsListener,
 
                 setUpProgress(allTrxs ?: 0.0, activeBudget.amount)
             } else {
-                NotificationAlertDialog.show(supportFragmentManager, getString(R.string.you_dont_have_active_budget), getString(R.string.no_active_budget))
+                if (isResume && noActiveBudget < 3) {
+                    NotificationAlertDialog.show(supportFragmentManager,
+                            getString(R.string.you_dont_have_active_budget),
+                            getString(R.string.no_active_budget))
+                    noActiveBudget++
+                }
                 setUpProgress(0.0, 0.0)
             }
         }
@@ -157,16 +168,18 @@ class HomeActivity : CoreActivity(), SmsListener,
         return false
     }
 
+    var isResume = false
     override fun onResume() {
         super.onResume()
+        isResume = true
         getCurrentlySelectedBank()
 
         if (viewModel.getBankName() != null) {
 
             viewModel.loadTransactionsUnderTheHood().forEachIndexed { index, smsMessage ->
-                if (index < 6) {
-//                val currentTransaction = TransactionParser.parseToTransaction("union", smsMessage)
-//                makeToast("${currentTransaction}")
+//                if (index < 6) {
+////                val currentTransaction = TransactionParser.parseToTransaction("union", smsMessage)
+////                makeToast("${currentTransaction}")
                 }
             }
 
@@ -177,6 +190,11 @@ class HomeActivity : CoreActivity(), SmsListener,
                 fetchBudget()
             }, 2000)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isResume = false
     }
 
     private fun showLoading() {
