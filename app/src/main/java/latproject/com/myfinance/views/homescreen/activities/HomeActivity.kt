@@ -17,6 +17,7 @@ import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.Constants
 import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.globals.navigateTo
+import latproject.com.myfinance.core.globals.toastLong
 import latproject.com.myfinance.core.model.Transactions
 import latproject.com.myfinance.core.model.modelparser.TransactionParser
 import latproject.com.myfinance.core.room.RealmBankTransaction
@@ -47,24 +48,23 @@ class HomeActivity : CoreActivity(), SmsListener,
     val catLoadingView = CatLoadingView()
 
     override fun onMessageReceived(message: SmsMessage) {
-        try {
-            val bankName = requireNotNull(viewModel.getBankName())
-            if (message.displayOriginatingAddress.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length / 2))) {
+        var bankName = requireNotNull(viewModel.getBankName())
+        if (message.displayOriginatingAddress.toLowerCase().contains(bankName.toLowerCase().substring(0, bankName.length / 2))) {
 
-                val sms = latproject.com.myfinance.core.model.SmsMessage()
-                sms.body = message.displayMessageBody
-                sms.from = message.displayOriginatingAddress
-                sms.date = message.timestampMillis
+            val sms = latproject.com.myfinance.core.model.SmsMessage()
+            sms.body = message.displayMessageBody
+            sms.from = message.displayOriginatingAddress
+            sms.date = message.timestampMillis
 
-                val bankTransaction = TransactionParser.parseToTransaction(bankName, sms)
+            val bankTransaction = TransactionParser.parseToTransaction(bankName, sms)
 
-                if (bankTransaction != null) {
-                    viewModel.saveRealmTransaction(bankTransaction)
-                }
+            if (bankTransaction != null) {
+                viewModel.saveRealmTransaction(bankTransaction)
             }
-        } catch (ex: IllegalStateException) {
-            Timber.e("ERROR %s", ex)
         }
+
+        //TODO process message notification here...
+//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,41 +73,19 @@ class HomeActivity : CoreActivity(), SmsListener,
         binding.handler = HomeActivityHandler()
         viewModel = HomeActivityViewModel(this)
         binding.viewModel = viewModel
+        initIntentFilter()
+        initSms()
+        initSmsServiceIntent()
+        getCurrentlySelectedBank()
+        showLoading()
 
-        if (viewModel.currentBank() == null || viewModel.currentBank()!!.name == null) {
-            getCurrentlySelectedBank()
-        } else {
-
-            showLoading()
-            initSms()
-            initSmsServiceIntent()
-            Handler().postDelayed({
-                runOnUiThread {
-                    hideLoading()
-                    loadTransactions()
-                }
-            }, 2000)
-        }
+        bindBank()
     }
 
     override fun onStart() {
         super.onStart()
         setStatusBarColor(R.color.white)
-        registerReceiver()
-    }
-
-    private fun getCurrentlySelectedBank() {
-        val bank = viewModel.currentBank()
-
-        if (bank?.name == null) {
-            val intent = Intent(this, SelectBankActivity::class.java)
-            intent.putExtra(Constants.FROM_ANOTHER_ACTIVITY, true)
-            startActivity(intent)
-            finish()
-        }
-
-        binding.currentBank.text = bank!!.name
-        binding.currentBank.setTextColor(Color.parseColor(bank.textColor))
+        registerTheReciever()
     }
 
     private fun updateBudgetsUnderTheHood() {
@@ -130,7 +108,7 @@ class HomeActivity : CoreActivity(), SmsListener,
         val budgets = viewModel.getBudgets()
         if (budgets == null || budgets.isEmpty()) {
             setUpProgress(0.0, 0.0)
-            if (isResume && noBudgetDialogCount < 3){
+            if (isResume && noBudgetDialogCount < 3) {
                 NotificationAlertDialog.show(supportFragmentManager, getString(R.string.you_have_not_created_budget_yet),
                         getString(R.string.no_budget_available))
                 noBudgetDialogCount++
@@ -168,28 +146,41 @@ class HomeActivity : CoreActivity(), SmsListener,
         return false
     }
 
+    private fun getCurrentlySelectedBank() {
+        val bank = viewModel.currentBank()
+
+        if (bank?.name == null) {
+            val intent = Intent(this, SelectBankActivity::class.java)
+            intent.putExtra(Constants.FROM_ANOTHER_ACTIVITY, true)
+            startActivity(intent)
+            finish()
+        } else {
+            binding.currentBank.text = bank.name
+            binding.currentBank.setTextColor(Color.parseColor(bank.textColor))
+        }
+    }
+
     var isResume = false
     override fun onResume() {
         super.onResume()
         isResume = true
         getCurrentlySelectedBank()
-
+        bindBank()
         if (viewModel.getBankName() != null) {
 
             viewModel.loadTransactionsUnderTheHood().forEachIndexed { index, smsMessage ->
-//                if (index < 6) {
+                //                if (index < 6) {
 ////                val currentTransaction = TransactionParser.parseToTransaction("union", smsMessage)
 ////                makeToast("${currentTransaction}")
-                }
             }
-
-            updateBudgetsUnderTheHood()
-
-            Handler().postDelayed({
-                hideLoading()
-                fetchBudget()
-            }, 2000)
         }
+
+        updateBudgetsUnderTheHood()
+
+        Handler().postDelayed({
+            hideLoading()
+            fetchBudget()
+        }, 2000)
     }
 
     override fun onPause() {
@@ -201,24 +192,9 @@ class HomeActivity : CoreActivity(), SmsListener,
         binding.loading.visibility = View.VISIBLE
     }
 
+
     private fun hideLoading() {
         binding.loading.visibility = View.GONE
-    }
-
-    private fun cacheTransactions() {
-        if (permissionManager == null) {
-            permissionManager = PermissionManager(this)
-            if (permissionManager!!.checkPermissionForSmsRead())
-                loadTransactions()
-            else
-                permissionManager!!.requestPermissionToReadSms()
-            permissionManager!!.checkPermissionForSmsRead()
-        } else {
-            if (permissionManager!!.checkPermissionForSmsRead())
-                loadTransactions()
-            else
-                permissionManager!!.checkPermissionForSmsRead()
-        }
     }
 
     private fun showAccountLimitDialog() {
@@ -279,7 +255,6 @@ class HomeActivity : CoreActivity(), SmsListener,
             } else {
                 binding.budgetProgressBar.color = ContextCompat.getColor(this, R.color.budget_fine)
             }
-
             binding.budgetProgressBar.setProgressWithAnimation(valueInPercent.toFloat(), 2500)
         }
     }
@@ -312,6 +287,84 @@ class HomeActivity : CoreActivity(), SmsListener,
         } else {
             permissionManager!!.checkPermissionForSmsRead()
         }
+    }
+
+    private lateinit var smsServiceIntent: Intent
+    private fun initSmsServiceIntent() {
+        if (permissionManager == null) {
+            permissionManager = PermissionManager(this)
+            if (permissionManager!!.checkPermissionForSmsRead()) {
+                smsServiceIntent = Intent(this, SmsService::class.java)
+                startService(smsServiceIntent)
+                bindSmsService()
+            }
+        }
+    }
+
+    lateinit var smsService: SmsService
+    private var serviceBounded = false
+    var serviceConnection: ServiceConnection? = null
+    private fun bindSmsService() {
+        if (serviceConnection == null) {
+            serviceConnection = object : ServiceConnection {
+                override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+                    val binder = iBinder as SmsService.ServiceBinder
+                    smsService = binder.service
+                    scheduleMessageFetch()
+                }
+
+                override fun onServiceDisconnected(componentName: ComponentName) {
+                    serviceBounded = false
+                }
+            }
+
+            bindService(smsServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    lateinit var intentFilter: IntentFilter
+    private fun initIntentFilter() {
+        intentFilter = IntentFilter(Constants.SMS_TRANSACTION_LIST_INTENT)
+    }
+
+    private fun registerTheReciever() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadCastReceiver, intentFilter)
+    }
+
+    private fun unRegisterTheReciever() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadCastReceiver)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unRegisterTheReciever()
+    }
+
+    private var broadCastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, receiverIntent: Intent?) {
+            if (receiverIntent != null && receiverIntent.hasExtra(Constants.TRANSACTION_LIST)) {
+                val transactions: Transactions = receiverIntent.getSerializableExtra(Constants.TRANSACTION_LIST) as Transactions
+                if (transactions.transactions != null) {
+                    all.clear()
+                    all.addAll(transactions.transactions!!)
+                    fetchBudget()
+                }
+            }
+        }
+    }
+
+    private fun scheduleMessageFetch() {
+        val t = Timer()
+        t.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    smsService.readMessages()
+                }
+            }
+        }, //Set how long before to start calling the TimerTask (in milliseconds)
+                8000,
+                //Set the amount of time between each execution (in milliseconds)
+                160000)
     }
 
     private fun vibrate() {
@@ -387,7 +440,7 @@ class HomeActivity : CoreActivity(), SmsListener,
     }
 
     private fun showProgress() {
-        binding.whiteBackground.visibility = View.GONE
+        binding.whiteBackground.visibility = View.VISIBLE
         catLoadingView.show(supportFragmentManager, "")
     }
 
@@ -404,82 +457,5 @@ class HomeActivity : CoreActivity(), SmsListener,
 
     override fun onOkayClicked() {
         navigateToBudgetCreationPage()
-    }
-
-    private fun registerReceiver() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                broadCastReceiver, IntentFilter(Constants.SMS_TRANSACTION_LIST_INTENT))
-    }
-
-    fun unRegisterReceiver() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadCastReceiver)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unRegisterReceiver()
-    }
-
-    internal var serviceBounded: Boolean = false
-
-    private lateinit var smsService: SmsService
-
-    private var smsServiceIntent: Intent? = null
-
-    private fun initSmsServiceIntent() {
-        if (permissionManager == null) {
-            permissionManager = PermissionManager(this)
-            if (permissionManager!!.checkPermissionForSmsRead()) {
-                smsServiceIntent = Intent(this, SmsService::class.java)
-                startService(smsServiceIntent)
-                bindSmsService()
-            }
-        }
-    }
-
-    private fun bindSmsService() {
-        if (serviceConnection == null) {
-            serviceConnection = object : ServiceConnection {
-                override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-                    val binder = iBinder as SmsService.ServiceBinder
-                    smsService = binder.service
-                    scheduleMessageFetch()
-                }
-
-                override fun onServiceDisconnected(componentName: ComponentName) {
-                    serviceBounded = false
-                }
-            }
-
-            bindService(smsServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
-        }
-    }
-
-    private fun scheduleMessageFetch() {
-        val t = Timer()
-        t.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                runOnUiThread {
-                    smsService.readMessages()
-                }
-            }
-        }, //Set how long before to start calling the TimerTask (in milliseconds)
-                8000,
-                //Set the amount of time between each execution (in milliseconds)
-                160000)
-    }
-
-    private var serviceConnection: ServiceConnection? = null
-    private var broadCastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, receiverIntent: Intent?) {
-            if (receiverIntent != null && receiverIntent.hasExtra(Constants.TRANSACTION_LIST)) {
-                val transactions: Transactions = receiverIntent.getSerializableExtra(Constants.TRANSACTION_LIST) as Transactions
-                if (transactions.transactions != null) {
-                    all.clear()
-                    all.addAll(transactions.transactions!!)
-                    fetchBudget()
-                }
-            }
-        }
     }
 }

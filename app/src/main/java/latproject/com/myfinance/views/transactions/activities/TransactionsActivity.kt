@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import latproject.com.myfinance.R
 import latproject.com.myfinance.core.globals.Constants
+import latproject.com.myfinance.core.globals.makeToast
 import latproject.com.myfinance.core.room.RealmBankTransaction
 import latproject.com.myfinance.core.view.CoreActivity
 import latproject.com.myfinance.databinding.ActivityTransactionsBinding
